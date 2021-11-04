@@ -16,6 +16,6 @@ form {
     margin: auto;
 }
 
-input {
+input.form-control {
     margin-top: 1em;
 }
