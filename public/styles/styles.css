@@ -7,3 +7,15 @@
     max-width: 40%;
     height: auto;
 }
+
+h2 {
+    text-align: center;
+}
+
+form {
+    margin: auto;
+}
+
+input {
+    margin-top: 1em;
+}

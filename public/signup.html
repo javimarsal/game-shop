@@ -55,7 +55,7 @@
                         <a class="nav-link dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">User</a>
                         <!-- User dropdown items -->
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-
-                        labelledby=“userDropdown">
+                        labelledby="userDropdown">
                             <li>
                                 <a class="dropdown-item" href="#">Sign up</a>
                             </li>
@@ -92,7 +92,34 @@
 
     <main>
         <div class="container">
-            
+            <form class="col-10 col-md-6 col-lg-4 col-xl-3">
+                <h2>Sign Up</h2>
+                <label for="name" hidden></label>
+                <input type="text" class="form-control" name="name" placeholder="Name">
+                
+                <label for="surname" hidden></label>
+                <input type="text" class="form-control" name="surname" placeholder="Surname">
+                
+                <label for="address" hidden></label>
+                <input type="text" class="form-control" name="address" placeholder="Address">
+                
+                <label for="birth" hidden></label>
+                <input type="date" class="form-control" name="birth" placeholder="dd/mm/aaaa">
+
+                <label for="email" hidden></label>
+                <input type="email" class="form-control" name="email" placeholder="email@example.com">
+
+                <label for="password" hidden></label>
+                <input type="password" class="form-control" name="password" placeholder="Password">
+
+                <label for="confirm-password" hidden></label>
+                <input type="password" class="form-control" name="confirm-password" placeholder="Confirm Password">
+                
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a href="/" class="mt-2 btn btn-primary" role="button">Sign up</a>
+                  </div>
+                </div>
+            </form>
         </div>
     </main>
 
