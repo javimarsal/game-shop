@@ -22,3 +22,22 @@ form {
 input.form-control {
     margin-top: 1em;
 }
+
+.card-title {
+    font-size: 1.5em;
+    margin-top: 0em;
+    margin-bottom: 0em;
+}
+
+.card-button {
+    float: right;
+    margin-right: 0.5em;
+    margin-top: 0.4em;
+}
+
+.card-price {
+    font-size: 2em;
+    font-weight: bold;
+    float: right;
+    margin-right: 0.5em;
+}
