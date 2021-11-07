@@ -23,6 +23,10 @@ input.form-control {
     margin-top: 1em;
 }
 
+label {
+    font-weight: bold;
+}
+
 .card-title {
     font-size: 1.5em;
     margin-top: 0em;
