@@ -16,10 +16,16 @@ app.use(logger('dev'));
 // Set public folder to publish static content
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Adds the / route to the application
-app.get('/', function(req, res) {
-    // Sends the Hello World string back to the client
-    res.send('<p>Hello World!</p>');
+// Set redirection to index.html
+app.get(/\/.*/, function (req, res) {
+    var matches = null;
+    // ToDO: Añadir después el resto de páginas
+    var templates = ['cart'];
+    if ((matches = req.path.match(/^\/$/)) ||
+        ((matches = req.path.match(/^\/([^\/]*)\/?$/)) && templates.includes(matches[1]))) // ! ya no sería matches[1]
+        res.sendFile(path.join(__dirname, '/public/index.html'));
+    else
+        res.sendStatus(404);
 });
 
 // Listen to port 3000

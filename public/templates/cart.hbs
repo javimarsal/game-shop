@@ -1,0 +1,164 @@
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+        <!-- Brand Logo -->
+        <a class="navbar-brand" href="/">
+            <img class="logo-1" src="assets/img/game-shop-logo.svg" alt="GameShop Logo">
+        </a>
+
+        <!-- Menu button (when menu is collapsed) -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navigation bar -->
+        <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
+            <ul class="navbar-nav mb-2 mb-md-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" id="cartDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Cart <span class="badge badge-secondary">0</span>
+                    </a>
+                    
+                    <!-- Cart dropdown items -->
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-
+                    labelledby="cartDropdown">
+                        <li>
+                            <a class="dropdown-item" href="cart.html">View cart</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="purchase.html">Checkout</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">User</a>
+                    <!-- User dropdown items -->
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-
+                    labelledby="userDropdown">
+                        <li>
+                            <a class="dropdown-item" href="signup.html">Sign up</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="signin.html">Sign in</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="profile.html">View profile</a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="/">Sign out</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<header class="pt-5 mb-4 bg-primary text-light">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col p-5 text-center">
+                <img class="logo-2" src="assets/img/game-shop-logo.svg" alt="GameShop Logo">
+                <h1 class="display-4">Web Site</h1>
+                <p class="lead">Game Shop Informational WebApp for Web Engineering and Services</p>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main>
+    <div class="container">
+        <h1>Shopping Cart</h1>
+
+        <!-- Total on the Top -->
+        <div class="row">
+            <label for="staticTotalTop" class="col-sm-2 col-form-label">Total: </label>
+            <div class="col-sm-10">
+                <input type="text" readonly disabled class="form-control-plaintext" id="staticTotalTop" value="€ 36.3">
+            </div>
+        </div>
+
+        <div class="mt-2">
+            <h2>Items</h2>
+            <table class="table table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th scope="col">Qty</th>
+                        <th scope="col">Product</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Total</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Product 1</td>
+                        <td>Price</td>
+                        <td>Total</td>
+                        <td>
+                            <div class="dropdown">
+                                <a href="#" class="btn btn-outline-danger dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Remove
+                                </a>
+
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <li><a href="#" class="dropdown-item">Delete one</a></li>
+                                    <li><a href="#" class="dropdown-item">Delete all</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>Product 2</td>
+                        <td>Price</td>
+                        <td>Total</td>
+                        <td>
+                            <div class="dropdown">
+                                <a href="#" class="btn btn-outline-danger dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Remove
+                                </a>
+
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <li><a href="#" class="dropdown-item">Delete all</a></li>
+                                    <li><a href="#" class="dropdown-item">Delete one</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="mt-2 row">
+                <label for="staticSubtotal" class="col-sm-2 col-form-label">Subtotal: </label>
+                <div class="col-sm-10">
+                    <input type="text" readonly disabled class="form-control-plaintext" id="staticSubtotal" value="€ 30">
+                </div>
+
+                <label for="staticTax" class="col-sm-2 col-form-label">Tax: </label>
+                <div class="col-sm-10">
+                    <input type="text" readonly disabled class="form-control-plaintext" id="staticTax" value="€ 6.3">
+                </div>
+
+                <label for="staticTotal" class="col-sm-2 col-form-label">Total: </label>
+                <div class="col-sm-10">
+                    <input type="text" readonly disabled class="form-control-plaintext" id="staticTotal" value="€ 36.3">
+                </div>
+            </div>
+            
+            <!-- Purchase button -->
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <a href="purchase.html" class="mt-2 btn btn-primary" role="button">Purchase</a>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="d-flex mt-auto fixed-bottom">
+    <div class="col py-3 mt-4 px-5 border-top text-center bg-light">
+        <p class="mb-0 text-muted"><small>&copy;GameShop created by Javier Martínez Saltó for the 2021 Web Engineering and Services course</small></p>
+    </div>
+</footer>
