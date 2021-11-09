@@ -19,7 +19,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Set redirection to index.html
 app.get(/\/.*/, function (req, res) {
     var matches = null;
-    var templates = ['cart', 'order'];
+    var templates = ['cart', 'order', 'profile', 'purchase', 'signin', 'signup'];
     if ((matches = req.path.match(/^\/$/)) ||
         ((matches = req.path.match(/^\/([^\/]*)\/?$/)) && templates.includes(matches[1])))
         res.sendFile(path.join(__dirname, '/public/index.html'));

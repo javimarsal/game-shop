@@ -1,0 +1,73 @@
+{{> navbar}}
+
+{{> header}}
+
+<main>
+    <div class="container">
+        <!-- Personal Data -->
+        <form class="col-10 col-md-6 col-lg-4 col-xl-3">
+            <h2>Purchase</h2>
+            <label for="date" hidden></label>
+            <input type="date" class="form-control" name="date">
+
+            <label for="address" hidden></label>
+            <input type="text" class="form-control" name="address" placeholder="Address">
+
+            <label for="cardNumber" hidden></label>
+            <input type="text" class="form-control" name="cardNumber" placeholder="Card Number">
+            
+            <label for="cardOwner" hidden></label>
+            <input type="text" class="form-control" name="cardOwner" placeholder="Card Owner">
+        </form>
+
+        <!-- Items to purchase -->
+        <div class="mt-5">
+            <h2>Items</h2>
+            <table class="table table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th scope="col">Qty</th>
+                        <th scope="col">Product name</th>
+                        <th scope="col">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Product 1</td>
+                        <td>10</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>Product 2</td>
+                        <td>20</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="mt-4 row">
+                <label for="staticSubtotal" class="col-sm-2 col-form-label">Subtotal: </label>
+                <div class="col-sm-10">
+                    <input type="text" readonly disabled class="form-control-plaintext" id="staticSubtotal" value="€ Subtotal">
+                </div>
+
+                <label for="staticTax" class="col-sm-2 col-form-label">Tax: </label>
+                <div class="col-sm-10">
+                    <input type="text" readonly disabled class="form-control-plaintext" id="staticTax" value="€ Tax">
+                </div>
+
+                <label for="staticTotal" class="col-sm-2 col-form-label">Total: </label>
+                <div class="col-sm-10">
+                    <input type="text" readonly disabled class="form-control-plaintext" id="staticTotal" value="€ Total">
+                </div>
+            </div>
+            
+            <!-- Purchase button -->
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <a href="/" class="mt-2 btn btn-primary" role="button">Checkout</a>
+            </div>
+        </div>
+    </div>
+</main>
+
+{{> footer}}
