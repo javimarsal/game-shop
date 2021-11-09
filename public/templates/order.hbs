@@ -1,0 +1,77 @@
+{{> navbar}}
+
+{{> header}}
+
+<main>
+    <div class="container">
+        <!-- Profile data -->
+        <div class="row">
+            <h2>Order Number</h2>
+
+            <label for="staticDate" class="col-sm-2 col-form-label">Date: </label>
+            <div class="col-sm-10">
+                <input type="text" readonly disabled class="form-control-plaintext" id="staticDate" value="Date">
+            </div>
+
+            <label for="staticAddress" class="col-sm-2 col-form-label">Address: </label>
+            <div class="col-sm-10">
+                <input type="text" readonly disabled class="form-control-plaintext" id="staticAddress" value="Address">
+            </div>
+
+            <label for="staticCardNumber" class="col-sm-2 col-form-label">Card number: </label>
+            <div class="col-sm-10">
+                <input type="text" readonly disabled class="form-control-plaintext" id="staticCardNumber" value="Number">
+            </div>
+
+            <label for="staticCardHolder" class="col-sm-2 col-form-label">Card holder: </label>
+            <div class="col-sm-10">
+                <input type="text" readonly disabled class="form-control-plaintext" id="staticCardHolder" value="Owner">
+            </div>
+        </div>
+
+        <!-- Table of Orders -->
+        <div class="mt-2">
+            <h2>Products</h2>
+            <table class="table table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th scope="col">Qty</th>
+                        <th scope="col">Product</th>
+                        <th scope="col">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Qty</td>
+                        <td>Product</td>
+                        <td>Total</td>
+                    </tr>
+                    <tr>
+                        <td>Qty</td>
+                        <td>Product</td>
+                        <td>Total</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="mt-4 row">
+                <label for="staticSubtotal" class="col-sm-2 col-form-label">Subtotal: </label>
+                <div class="col-sm-10">
+                    <input type="text" readonly disabled class="form-control-plaintext" id="staticSubtotal" value="€ Subtotal">
+                </div>
+
+                <label for="staticTax" class="col-sm-2 col-form-label">Tax: </label>
+                <div class="col-sm-10">
+                    <input type="text" readonly disabled class="form-control-plaintext" id="staticTax" value="€ Tax">
+                </div>
+
+                <label for="staticTotal" class="col-sm-2 col-form-label">Total: </label>
+                <div class="col-sm-10">
+                    <input type="text" readonly disabled class="form-control-plaintext" id="staticTotal" value="€ Total">
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{{> footer}}

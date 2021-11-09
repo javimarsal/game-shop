@@ -19,10 +19,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Set redirection to index.html
 app.get(/\/.*/, function (req, res) {
     var matches = null;
-    // ToDO: Añadir después el resto de páginas
-    var templates = ['cart'];
+    var templates = ['cart', 'order'];
     if ((matches = req.path.match(/^\/$/)) ||
-        ((matches = req.path.match(/^\/([^\/]*)\/?$/)) && templates.includes(matches[1]))) // ! ya no sería matches[1]
+        ((matches = req.path.match(/^\/([^\/]*)\/?$/)) && templates.includes(matches[1])))
         res.sendFile(path.join(__dirname, '/public/index.html'));
     else
         res.sendStatus(404);
