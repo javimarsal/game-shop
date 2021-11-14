@@ -7,16 +7,25 @@
         <form class="col-10 col-md-6 col-lg-4 col-xl-3">
             <h2>Sign In</h2>
             <label for="email" hidden></label>
-            <input type="email" class="form-control" name="email" placeholder="email@example.com">
+            <input id="email" type="email" class="form-control" name="email" placeholder="email@example.com">
 
             <label for="password" hidden></label>
-            <input type="password" class="form-control" name="password" placeholder="Password">
+            <input id="password" type="password" class="form-control" name="password" placeholder="Password">
 
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <button class="mt-2 btn btn-primary" role="button" onclick="navigateTo(event, '/')">Sign in</button>
+                <button class="mt-2 btn btn-primary" role="button" onclick="signin_clicked(event)">Sign in</button>
             </div>
         </form>
     </div>
 </main>
 
 {{> footer}}
+
+<script>
+    function signin_clicked(event) {
+        Model.signin($('#email').val(), $('#password').val());
+        
+        if(Model.user) navigateTo(event, '/')
+        else navigateTo(event, '/signin')
+    }
+</script>

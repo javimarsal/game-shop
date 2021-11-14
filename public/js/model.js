@@ -57,8 +57,15 @@ Model.users = [{
     orders: []
 }];
 
-// Function
-// Model.signin = function() {}
+Model.signin = function (email, password) {
+    Model.user = null;
+    for (var i = 0; i < Model.users.length; i++) {
+        if (Model.users[i].email == email && Model.users[i].password == password) {
+            Model.user = Model.users[i];
+            break;
+        }
+    }
+}
 
 // Validaciones para los formularios Bootstrap > forms > validation
 
