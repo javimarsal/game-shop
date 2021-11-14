@@ -37,9 +37,14 @@
                         <li>
                             <a class="dropdown-item" href="signup" onclick="navigateTo(event, event.target.href)">Sign up</a>
                         </li>
+                        
+                        {{!-- Si user es falsy, muestra el li --}}
+                        {{#unless user}}
                         <li>
                             <a class="dropdown-item" href="signin" onclick="navigateTo(event, event.target.href)">Sign in</a>
                         </li>
+                        {{/unless}}
+
                         <li>
                             <a class="dropdown-item" href="profile" onclick="navigateTo(event, event.target.href)">View profile</a>
                         </li>
