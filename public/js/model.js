@@ -67,6 +67,8 @@ Model.signin = function (email, password) {
     }
 }
 
-// Validaciones para los formularios Bootstrap > forms > validation
+Model.signout = function () {
+    Model.user = null;
+}
 
 // Añadir los objetos necesarios en el modelo

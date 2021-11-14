@@ -48,15 +48,31 @@
                         <li>
                             <a class="dropdown-item" href="profile" onclick="navigateTo(event, event.target.href)">View profile</a>
                         </li>
+
+                        {{!-- Si el usuario ha iniciado sesión, se muestra el li de Sign out --}}
+                        {{#if user}}
                         <li>
                             <hr class="dropdown-divider">
                         </li>
                         <li>
-                            <a class="dropdown-item" href="/" onclick="navigateTo(event, event.target.href)">Sign out</a>
+                            <a class="dropdown-item" href="/" onclick="signout_clicked(event)">Sign out</a>
                         </li>
+                        {{/if}}
                     </ul>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
+
+<script>
+    function signout_clicked(event) {
+        if(user) {
+            // user = null;
+            Model.signout();
+
+            // navigate to root
+            navigateTo(event, event.target.href);
+        }
+    }
+</script>
