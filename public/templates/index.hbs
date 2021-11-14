@@ -16,7 +16,7 @@
                     <div class="card-body">
                         <p class="card-text">{{this.description}}</p>
 
-                        <a href="cart.html" class="btn btn-primary card-button" role="button">Buy</a>
+                        <button class="btn btn-primary card-button" role="button" onclick="navigateTo(event, '/cart')">Buy</button>
                         <span class="card-price">{{formatPrice this.price}}</span>
                     </div>
                 </div>
