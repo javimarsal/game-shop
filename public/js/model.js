@@ -67,8 +67,59 @@ Model.signin = function (email, password) {
     }
 }
 
+Model.signup = function (newUserData) {
+    Model.user = null;
+
+    // Comprobar que el correo no existe en la lista users
+    if (!this.isEmailRegistered(newUserData.email)) {
+        // Crear el nuevo usuario
+        let newUser = {
+            _id: this.searchMaxId_inUsersList() + 1,
+            email: newUserData.email,
+            password: newUserData.password,
+            name: newUserData.name,
+            surname: newUserData.surname,
+            birth: newUserData.birth,
+            address: newUserData.address,
+            shoppingCart: [],
+            orders: []
+        }
+
+        // Añadir el nuevo usuario a la lista users
+        this.users.push(newUser);
+
+        // Devolvemos el nuevo usuario
+        return newUser;
+    }
+
+    // Si el correo ya existe, devolvemos null
+    return null;
+}
+
 Model.signout = function () {
     Model.user = null;
 }
 
-// Añadir los objetos necesarios en el modelo
+Model.isEmailRegistered = function (email) {
+    for (var i = 0; i < Model.users.length; i++) {
+        if (Model.users[i].email == email) {
+            // Lo encuentra
+            return true;
+        }
+    }
+
+    // No lo encuentra
+    return false;
+}
+
+Model.searchMaxId_inUsersList = function () {
+    let maxId = Model.users[0]._id;
+
+    for (var i = 0; i < Model.users.length; i++) {
+        if(Model.users[i]._id > maxId) {
+            maxId = Model.users[i]._id;
+        }
+    }
+
+    return maxId;
+}

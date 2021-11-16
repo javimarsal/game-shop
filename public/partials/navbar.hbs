@@ -34,15 +34,12 @@
                     <!-- User dropdown items -->
                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-
                     labelledby="userDropdown">
-                        {{!-- Si user es falsy, muestra el li de Sign up --}}
+                        {{!-- Si user es falsy (no se ha iniciado sesión), muestra el li de Sign up y Sign in --}}
                         {{#unless user}}
                         <li>
                             <a class="dropdown-item" href="signup" onclick="navigateTo(event, event.target.href)">Sign up</a>
                         </li>
-                        {{/unless}}
                         
-                        {{!-- Si user es falsy, muestra el li de Sign in --}}
-                        {{#unless user}}
                         <li>
                             <a class="dropdown-item" href="signin" onclick="navigateTo(event, event.target.href)">Sign in</a>
                         </li>

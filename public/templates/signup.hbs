@@ -4,34 +4,104 @@
 
 <main>
     <div class="container">
-        <form class="col-10 col-md-6 col-lg-4 col-xl-3">
+        <form id="signup-form" class="col-10 col-md-6 col-lg-4 col-xl-3 needs-validation" novalidate>
             <h2>Sign Up</h2>
-            <label for="name" hidden></label>
-            <input type="text" class="form-control" name="name" placeholder="Name">
+            <div>
+                <label for="name" hidden></label>
+                <input id="name" type="text" class="form-control" name="name" placeholder="Name" required autofocus>
+                <div class="invalid-feedback">Please, provide a Name</div>
+            </div>
             
-            <label for="surname" hidden></label>
-            <input type="text" class="form-control" name="surname" placeholder="Surname">
+            <div>
+                <label for="surname" hidden></label>
+                <input id="surname" type="text" class="form-control" name="surname" placeholder="Surname" required>
+                <div class="invalid-feedback">Please, provide a Surname</div>
+            </div>
             
-            <label for="address" hidden></label>
-            <input type="text" class="form-control" name="address" placeholder="Address">
+            <div>
+                <label for="address" hidden></label>
+                <input id="address" type="text" class="form-control" name="address" placeholder="Address" required>
+                <div class="invalid-feedback">Please, provide an Address</div>
+            </div>
             
-            <label for="birth" hidden></label>
-            <input type="date" class="form-control" name="birth">
+            <div>
+                <label for="birth" hidden></label>
+                <input id="birth" type="date" class="form-control" name="birth" required>
+                <div class="invalid-feedback">Please, provide a Birth date</div>
+            </div>
 
-            <label for="email" hidden></label>
-            <input type="email" class="form-control" name="email" placeholder="email@example.com">
+            <div>
+                <label for="email" hidden></label>
+                <input id="email" type="email" class="form-control" name="email" placeholder="email@example.com" required>
+                <div class="invalid-feedback">Please, provide a valid Email</div>
+            </div>
 
-            <label for="password" hidden></label>
-            <input type="password" class="form-control" name="password" placeholder="Password">
+            <div>
+                <label for="password" hidden></label>
+                <input id="pass" type="password" class="form-control" name="password" placeholder="Password" required>
+                <div class="invalid-feedback">Please, provide a Password</div>
+            </div>
 
-            <label for="confirm-password" hidden></label>
-            <input type="password" class="form-control" name="confirm-password" placeholder="Confirm Password">
+            <div>
+                <label for="confirm-password" hidden></label>
+                <input id="confirmPass" type="password" class="form-control" name="confirm-password" placeholder="Confirm Password" required>
+                <div class="invalid-feedback">Please, confirm the Password</div>
+            </div>
             
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <button class="mt-2 btn btn-primary" role="button" onclick="navigateTo(event, '/')">Sign up</button>
+                <button class="mt-2 btn btn-primary" role="button" onclick="signup_clicked(event)">Sign up</button>
             </div>
         </form>
     </div>
 </main>
 
 {{> footer}}
+
+<script>
+    function signup_clicked(event) {
+        event.preventDefault();
+        var form = document.getElementById('signup-form');
+        form.classList.add('was-validated');
+
+        // usuario que se crea (si todo va bien)
+        let user = null;
+
+        if(form.checkValidity()) {
+            // Datos del formulario
+            let userName = $('#name').val();
+            let userSurname = $('#surname').val();
+            let userAddress = $('#address').val();
+            let userBirth = new Date($('#birth').val());
+            let userEmail = $('#email').val();
+            let userPass = $('#pass').val();
+            let userConfirmPass = $('#confirmPass').val();
+
+            // Comprobar que las contraseñas coinciden
+            if(userPass == userConfirmPass) {
+                // Nuevo usuario
+                let newUser = {
+                    email: userEmail,
+                    password: userPass,
+                    name: userName,
+                    surname: userSurname,
+                    birth: userBirth,
+                    address: userAddress
+                }
+
+                // Se devolverá un usuario si el correo no está registrado
+                user = Model.signup(newUser);
+
+                // Si se ha creado
+                if(user) {
+                    // Navegamos a sigin
+                    navigateTo(event, '/signin')
+                }
+            }
+            
+            // Las contraseñas no coinciden o el usuario no se ha creado
+            if (userPass != userConfirmPass  ||  !user) {
+                navigateTo(event, '/signup')
+            }
+        }
+    }
+</script>
