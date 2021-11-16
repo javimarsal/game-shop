@@ -53,7 +53,11 @@ Model.users = [{
     surname: 'Doe',
     birth: new Date(1990, 1, 1),
     address: '123 Main St, 12345 New York, USA',
-    shoppingCart: [],
+    shoppingCart: [/*{
+        qty: 1,
+        product: 'product 1',
+        price: '60'
+    }*/],
     orders: []
 }];
 
