@@ -14,6 +14,8 @@
             </div>
         </div>
 
+        {{!-- Mostrar los items si el Shopping Cart tiene items --}}
+        {{#if user.shoppingCart}}
         <div class="mt-2">
             <h2>Items</h2>
             <table class="table table-striped align-middle">
@@ -88,6 +90,13 @@
                 <button class="mt-2 btn btn-primary" role="button" onclick="navigateTo(event, '/purchase')">Purchase</button>
             </div>
         </div>
+        {{/if}}
+
+        {{#unless user.shoppingCart}}
+        <div class="mt-5">
+            <h2>No product items in the shopping cart yet</h2>
+        </div>
+        {{/unless}}
     </div>
 </main>
 
