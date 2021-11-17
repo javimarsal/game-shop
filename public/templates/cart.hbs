@@ -29,11 +29,12 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {{#each user.shoppingCart}}
                     <tr>
-                        <td>1</td>
-                        <td>Product 1</td>
-                        <td>Price</td>
-                        <td>Total</td>
+                        <td>{{this.qty}}</td>
+                        <td>{{this.title}}</td>
+                        <td>{{this.price}}</td>
+                        <td>{{this.total}}</td>
                         <td>
                             <div class="dropdown">
                                 <a href="#" class="btn btn-outline-danger dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
@@ -47,24 +48,7 @@
                             </div>
                         </td>
                     </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Product 2</td>
-                        <td>Price</td>
-                        <td>Total</td>
-                        <td>
-                            <div class="dropdown">
-                                <a href="#" class="btn btn-outline-danger dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Remove
-                                </a>
-
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                    <li><a href="#" class="dropdown-item">Delete all</a></li>
-                                    <li><a href="#" class="dropdown-item">Delete one</a></li>
-                                </ul>
-                            </div>
-                        </td>
-                    </tr>
+                    {{/each}}
                 </tbody>
             </table>
 

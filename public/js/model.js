@@ -140,6 +140,9 @@ Model.buy = function (productID) {
     if (productInCart) {
         // Aumentamos en 1 su qty
         productInCart.qty++;
+
+        // Actualizamos el precio total
+        productInCart.total += productInCart.price;
     }
     else {
         // Buscar el producto en la lista products
@@ -150,7 +153,8 @@ Model.buy = function (productID) {
             _id: p_inProductList._id,
             qty: 1,
             title: p_inProductList.title,
-            price: p_inProductList.price
+            price: p_inProductList.price,
+            total: p_inProductList.price
         }
 
         this.user.shoppingCart.push(newItem);
