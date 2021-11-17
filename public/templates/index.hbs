@@ -16,7 +16,7 @@
                     <div class="card-body">
                         <p class="card-text">{{this.description}}</p>
 
-                        <button class="btn btn-primary card-button {{#unless ../user}} disabled {{/unless}}" role="button" onclick="navigateTo(event, '/cart')">Buy</button>
+                        <button class="btn btn-primary card-button {{#unless ../user}} disabled {{/unless}}" role="button" onclick="buy_clicked(event, {{this._id}})">Buy</button>
                         <span class="card-price">{{formatPrice this.price}}</span>
                     </div>
                 </div>
@@ -27,3 +27,14 @@
 </main>
 
 {{> footer}}
+
+<script>
+    function buy_clicked(event, productID) {
+        event.preventDefault();
+        
+        // Se añade el producto al carrito del usuario
+        Model.buy(productID);
+        console.log(Model.user.shoppingCart)
+        // navigateTo(event, '/cart')
+    }
+</script>

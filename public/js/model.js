@@ -61,6 +61,7 @@ Model.users = [{
     orders: []
 }];
 
+/* Sign In */
 Model.signin = function (email, password) {
     Model.user = null;
     for (var i = 0; i < Model.users.length; i++) {
@@ -71,6 +72,7 @@ Model.signin = function (email, password) {
     }
 }
 
+/* Sign Up */
 Model.signup = function (newUserData) {
     Model.user = null;
 
@@ -100,6 +102,7 @@ Model.signup = function (newUserData) {
     return null;
 }
 
+/* Sign Out */
 Model.signout = function () {
     Model.user = null;
 }
@@ -126,4 +129,38 @@ Model.searchMaxId_inUsersList = function () {
     }
 
     return maxId;
+}
+
+/* Buy */
+Model.buy = function (productID) {
+    // Buscar el producto en el shoppingCart de user
+    let productInCart = this.findProduct_inCart(productID)
+
+    // Si el producto está en el shoppingCart
+    if (productInCart) {
+        // Aumentamos en 1 su qty
+        productInCart.qty++;
+    }
+    else {
+        // Buscar el producto en la lista products
+        let p_inProductList = this.findProduct_inProductsList(productID)
+
+        // Añadimos el producto al shoppingCart
+        let newItem = {
+            _id: p_inProductList._id,
+            qty: 1,
+            title: p_inProductList.title,
+            price: p_inProductList.price
+        }
+
+        this.user.shoppingCart.push(newItem);
+    }
+}
+
+Model.findProduct_inCart = function (productID) {
+    return this.user.shoppingCart.find(item => item._id == productID)
+}
+
+Model.findProduct_inProductsList = function(productID) {
+    return this.products.find(item => item._id == productID)
 }
