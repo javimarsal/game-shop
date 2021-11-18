@@ -211,3 +211,14 @@ Model.findIndex_knowingID = function (list, ID) {
 Model.formatNumber = function (number) {
     return (Math.round(number * 100) / 100).toFixed(2)
 }
+
+// Para el badge de cart
+Model.getTotalQty = function () {
+    let totalQty = 0;
+
+    for(item of this.user.shoppingCart) {
+        totalQty += item.qty
+    }
+
+    return totalQty
+}

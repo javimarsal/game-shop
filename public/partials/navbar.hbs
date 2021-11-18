@@ -80,12 +80,6 @@
     }
 
     function getTotalQty () {
-        totalQty = 0;
-
-        for (let item of Model.user.shoppingCart) {
-            totalQty += item.qty
-        }
-        
-        return totalQty
+        return Model.getTotalQty()
     }
 </script>
