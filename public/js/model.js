@@ -61,6 +61,8 @@ Model.users = [{
     orders: []
 }];
 
+Model.tax = 0.21;
+
 /* Sign In */
 Model.signin = function (email, password) {
     Model.user = null;
@@ -221,4 +223,20 @@ Model.getTotalQty = function () {
     }
 
     return totalQty
+}
+
+// Calcular subtotal
+Model.getSubtotal = function () {
+    let subtotal = 0;
+
+    for (item of this.user.shoppingCart) {
+        subtotal += item.total
+    }
+
+    return subtotal
+}
+
+// Añadir el tax al price
+Model.getSubtotal_addedTax = function () {
+    return this.getSubtotal()*this.tax
 }

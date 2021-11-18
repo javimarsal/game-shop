@@ -85,7 +85,7 @@
 
             Handlebars.registerHelper('totalQty', function () {
                 return getTotalQty()
-            })
+            });
 
             window.addEventListener('popstate', (event) => route(), false);
 
@@ -95,6 +95,38 @@
             loadPartial('/partials/footer.hbs', 'footer')
             ).always(function () {
                 route();
+            });
+        });
+    </script>
+
+    <!-- Scripts para cart.hbs -->
+    <script>
+        function getSubtotal () {
+            return Model.getSubtotal()
+        }
+        
+        function getTax () {
+            return Model.getSubtotal_addedTax()
+        }
+
+        function getTotal () {
+            return getSubtotal() + getTax()
+        }
+
+        $(function() {
+            Handlebars.registerHelper('getSubtotal', function () {
+                var result = getSubtotal();
+                return new Handlebars.SafeString(result)
+            });
+
+            Handlebars.registerHelper('getTax', function () {
+                var result = getTax();
+                return new Handlebars.SafeString(result)
+            });
+
+            Handlebars.registerHelper('getTotal', function () {
+                var result = getTotal();
+                return new Handlebars.SafeString(result)
             });
         });
     </script>
