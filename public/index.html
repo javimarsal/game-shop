@@ -83,6 +83,10 @@
                 return new Handlebars.SafeString(result);
             });
 
+            Handlebars.registerHelper('totalQty', function () {
+                return getTotalQty()
+            })
+
             window.addEventListener('popstate', (event) => route(), false);
 
             // Partials

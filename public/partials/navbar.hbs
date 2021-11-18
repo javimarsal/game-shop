@@ -16,7 +16,7 @@
                 {{#if user}}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" id="cartDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        Cart <span class="badge badge-secondary">{{user.shoppingCart.length}}</span>
+                        Cart <span class="badge badge-secondary">{{totalQty}}</span>
                     </a>
                     
                     <!-- Cart dropdown items -->
@@ -69,13 +69,23 @@
 </nav>
 
 <script>
-    function signout_clicked(event) {
-        if(user) {
+    function signout_clicked (event) {
+        if(Model.user) {
             // user = null;
             Model.signout();
 
             // navigate to root
             navigateTo(event, event.target.href);
         }
+    }
+
+    function getTotalQty () {
+        totalQty = 0;
+
+        for (let item of Model.user.shoppingCart) {
+            totalQty += item.qty
+        }
+        
+        return totalQty
     }
 </script>
