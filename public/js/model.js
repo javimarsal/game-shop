@@ -165,6 +165,46 @@ Model.findProduct_inCart = function (productID) {
     return this.user.shoppingCart.find(item => item._id == productID)
 }
 
-Model.findProduct_inProductsList = function(productID) {
+Model.findProduct_inProductsList = function (productID) {
     return this.products.find(item => item._id == productID)
+}
+
+/* DeleteOne de Cart */
+Model.deleteOne = function (productID) {
+    // Buscar el producto en el shoppingCart de user
+    let productInCart = this.findProduct_inCart(productID)
+
+    // Si solo hay 1 producto, lo eliminamos del shoppingCart de user
+    if (productInCart.qty == 1) {
+        // índice del producto en shoppingCart
+        let productIndex = this.findIndex_knowingID(this.user.shoppingCart, productID)
+
+        // eliminar el producto de shoppingCart
+        this.user.shoppingCart.splice(productIndex, 1)
+        
+        return undefined
+    }
+    else {
+        // restar 1 a su qty
+        productInCart.qty--;
+        
+        // actualizar su total
+        productInCart.total -= productInCart.price;
+
+        return productInCart
+    }
+}
+
+/* DeleteAll de Cart */
+Model.deleteAll = function (productID) {
+    // Buscar el producto en el shoppingCart de user
+    let product = this.findProduct_inCart(productID)
+}
+
+Model.findIndex_knowingID = function (list, ID) {
+    return list.findIndex(item => item._id == ID)
+}
+
+Model.formatNumber = function (number) {
+    return (Math.round(number * 100) / 100).toFixed(2)
 }

@@ -30,20 +30,20 @@
                 </thead>
                 <tbody>
                     {{#each user.shoppingCart}}
-                    <tr>
-                        <td>{{this.qty}}</td>
+                    <tr id="{{this._id}}">
+                        <td id="{{this._id}}qty">{{this.qty}}</td>
                         <td>{{this.title}}</td>
                         <td>{{this.price}}</td>
-                        <td>{{this.total}}</td>
+                        <td id="{{this._id}}total">{{formatPrice this.total}}</td>
                         <td>
                             <div class="dropdown">
-                                <a href="#" class="btn btn-outline-danger dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                <button href="#" class="btn btn-outline-danger dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                                     Remove
-                                </a>
+                                </button>
 
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                    <li><a href="#" class="dropdown-item">Delete one</a></li>
-                                    <li><a href="#" class="dropdown-item">Delete all</a></li>
+                                    <li><button href="#" class="dropdown-item" onclick="deleteOne_clicked({{this._id}})">Delete one</button></li>
+                                    <li><button href="#" class="dropdown-item" onclick="deleteAll_clicked({{this._id}})">Delete all</button></li>
                                 </ul>
                             </div>
                         </td>
@@ -85,3 +85,18 @@
 </main>
 
 {{> footer}}
+
+<script>
+    function deleteOne_clicked(productID) {
+        let item = Model.deleteOne(productID);
+
+        // Render para refrescar los datos
+        route()
+    }
+
+    function deleteAll_clicked(productID) {
+        Model.deleteAll(productID)
+
+        // quitar fila de la tabla
+    }
+</script>
