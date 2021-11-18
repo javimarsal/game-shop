@@ -197,8 +197,11 @@ Model.deleteOne = function (productID) {
 
 /* DeleteAll de Cart */
 Model.deleteAll = function (productID) {
-    // Buscar el producto en el shoppingCart de user
-    let product = this.findProduct_inCart(productID)
+    // índice del producto en shoppingCart
+    let productIndex = this.findIndex_knowingID(this.user.shoppingCart, productID)
+
+    // eliminar el producto de shoppingCart
+    this.user.shoppingCart.splice(productIndex, 1)
 }
 
 Model.findIndex_knowingID = function (list, ID) {

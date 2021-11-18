@@ -95,8 +95,9 @@
     }
 
     function deleteAll_clicked(productID) {
-        Model.deleteAll(productID)
+        Model.deleteAll(productID);
 
-        // quitar fila de la tabla
+        // Render para refrescar los datos
+        route()
     }
 </script>
