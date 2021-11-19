@@ -47,33 +47,30 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {{#each user.shoppingCart}}
                     <tr>
-                        <td>1</td>
-                        <td>Product 1</td>
-                        <td>10</td>
+                        <td>{{this.qty}}</td>
+                        <td>{{this.title}}</td>
+                        <td>{{formatPrice this.total}}</td>
                     </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Product 2</td>
-                        <td>20</td>
-                    </tr>
+                    {{/each}}
                 </tbody>
             </table>
 
             <div class="mt-4 row">
                 <label for="staticSubtotal" class="col-sm-2 col-form-label">Subtotal: </label>
                 <div class="col-sm-10">
-                    <input type="text" readonly disabled class="form-control-plaintext" id="staticSubtotal" value="€ Subtotal">
+                    <input type="text" readonly disabled class="form-control-plaintext" id="staticSubtotal" value="{{formatPrice (getSubtotal)}}">
                 </div>
 
                 <label for="staticTax" class="col-sm-2 col-form-label">Tax: </label>
                 <div class="col-sm-10">
-                    <input type="text" readonly disabled class="form-control-plaintext" id="staticTax" value="€ Tax">
+                    <input type="text" readonly disabled class="form-control-plaintext" id="staticTax" value="{{formatPrice (getTax)}}">
                 </div>
 
                 <label for="staticTotal" class="col-sm-2 col-form-label">Total: </label>
                 <div class="col-sm-10">
-                    <input type="text" readonly disabled class="form-control-plaintext" id="staticTotal" value="€ Total">
+                    <input type="text" readonly disabled class="form-control-plaintext" id="staticTotal" value="{{formatPrice (getTotal)}}">
                 </div>
             </div>
             
