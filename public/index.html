@@ -87,6 +87,13 @@
                 return getTotalQty()
             });
 
+            Handlebars.registerHelper('todayDate', function() {
+                let timeElapsed = Date.now();
+                let today = new Date(timeElapsed);
+
+                return today.toLocaleDateString()
+            });
+
             window.addEventListener('popstate', (event) => route(), false);
 
             // Partials

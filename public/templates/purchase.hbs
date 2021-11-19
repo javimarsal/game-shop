@@ -8,18 +8,31 @@
 
         {{#if user.shoppingCart}}
         <!-- Personal Data -->
-        <form class="col-10 col-md-6 col-lg-4 col-xl-3">
-            <label for="date" hidden></label>
-            <input type="date" class="form-control" name="date">
+        <form id="purchase-form" class="col-10 col-md-6 col-lg-4 col-xl-3 needs-validation" novalidate>
+            <h2>Data requested for Purchase</h2>
+            <div>
+                <label for="date" hidden></label>
+                <input type="text" class="form-control" name="date" value="{{todayDate}}" required disabled>
+                <div class="invalid-feedback">Please, provide a Purchase date</div>
+            </div>
 
-            <label for="address" hidden></label>
-            <input type="text" class="form-control" name="address" placeholder="Address">
+            <div>
+                <label for="address" hidden></label>
+                <input type="text" class="form-control" name="address" placeholder="Address" required>
+                <div class="invalid-feedback">Please, provide an Address</div>
+            </div>
 
-            <label for="cardNumber" hidden></label>
-            <input type="text" class="form-control" name="cardNumber" placeholder="Card Number">
+            <div>
+                <label for="cardNumber" hidden></label>
+                <input type="text" class="form-control" name="cardNumber" placeholder="Card Number" required>
+                <div class="invalid-feedback">Please, provide a Card Number</div>
+            </div>
             
-            <label for="cardOwner" hidden></label>
-            <input type="text" class="form-control" name="cardOwner" placeholder="Card Owner">
+            <div>
+                <label for="cardOwner" hidden></label>
+                <input type="text" class="form-control" name="cardOwner" placeholder="Card Owner" required>
+                <div class="invalid-feedback">Please, provide the Name of the Card Owner</div>
+            </div>
         </form>
 
         <!-- Items to purchase -->
@@ -66,7 +79,7 @@
             
             <!-- Purchase button -->
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <button class="mt-2 btn btn-primary" role="button" onclick="navigateTo(event, '/')">Checkout</button>
+                <button class="mt-2 btn btn-primary" role="button" onclick="purchase_clicked(event)">Checkout</button>
             </div>
         </div>
 
@@ -79,3 +92,15 @@
 </main>
 
 {{> footer}}
+
+<script>
+    function purchase_clicked (event) {
+        event.preventDefault();
+        var form = document.getElementById('purchase-form');
+        form.classList.add('was-validated');
+
+        if (form.checkValidity()) {
+
+        }
+    }
+</script>
