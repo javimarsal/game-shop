@@ -4,9 +4,11 @@
 
 <main>
     <div class="container">
+        <h1>Purchase</h1>
+
+        {{#if user.shoppingCart}}
         <!-- Personal Data -->
         <form class="col-10 col-md-6 col-lg-4 col-xl-3">
-            <h2>Purchase</h2>
             <label for="date" hidden></label>
             <input type="date" class="form-control" name="date">
 
@@ -67,6 +69,12 @@
                 <button class="mt-2 btn btn-primary" role="button" onclick="navigateTo(event, '/')">Checkout</button>
             </div>
         </div>
+
+        {{else}}
+        <div class="mt-5">
+            <h2>No items in shopping cart</h2>
+        </div>
+        {{/if}}
     </div>
 </main>
 

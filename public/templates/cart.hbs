@@ -74,13 +74,12 @@
                 <button class="mt-2 btn btn-primary" role="button" onclick="navigateTo(event, '/purchase')">Purchase</button>
             </div>
         </div>
-        {{/if}}
 
-        {{#unless user.shoppingCart}}
+        {{else}}
         <div class="mt-5">
             <h2>No product items in the shopping cart yet</h2>
         </div>
-        {{/unless}}
+        {{/if}}
     </div>
 </main>
 
