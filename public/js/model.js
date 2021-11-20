@@ -250,6 +250,18 @@ Model.getSubtotal_addedTax = function () {
     return this.getSubtotal()*this.tax
 }
 
+// Calcular total (subtotal + tax)
+Model.getTotal_ofOrder = function (itemList) {
+    let total = 0;
+
+    // Recorremos la lista de items de la Order
+    for (item of itemList) {
+        total += (item.price + (item.price * this.tax)) * item.qty
+    }
+
+    return total
+}
+
 /* Purchase */
 Model.purchase = function (purchaseForm, IDitemList, purchaseNumber) {
     // Nueva order

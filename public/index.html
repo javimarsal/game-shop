@@ -138,6 +138,11 @@
                 var result = getTotal();
                 return new Handlebars.SafeString(result)
             });
+
+            Handlebars.registerHelper('getTotal_ofOrder', function (itemList) {
+                var result = Model.getTotal_ofOrder(itemList);
+                return new Handlebars.SafeString(result)
+            });
         });
     </script>
 

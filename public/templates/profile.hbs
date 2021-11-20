@@ -50,30 +50,16 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {{#each user.orders}}
                     <tr>
-                        <td>Date</td>
-                        <td>Order Number</td>
-                        <td>Total</td>
+                        <td>{{formatDate this.date}}</td>
+                        <td>{{this.number}}</td>
+                        <td>{{formatPrice (getTotal_ofOrder this.itemList)}}</td>
                         <td>
-                            <button class="btn btn-primary" role="button" onclick="navigateTo(event, '/order')">Details</button>
+                            <button class="btn btn-primary" role="button" onclick="navigateTo(event, '/order/id/'+{{this.number}})">Details</button>
                         </td>
                     </tr>
-                    <tr>
-                        <td>Date</td>
-                        <td>Order Number</td>
-                        <td>Total</td>
-                        <td>
-                            <button class="btn btn-primary" role="button" onclick="navigateTo(event, '/order')">Details</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Date</td>
-                        <td>Order Number</td>
-                        <td>Total</td>
-                        <td>
-                            <button class="btn btn-primary" role="button" onclick="navigateTo(event, '/order')">Details</button>
-                        </td>
-                    </tr>
+                    {{/each}}
                 </tbody>
             </table>
             {{else}}
