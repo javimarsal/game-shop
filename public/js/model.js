@@ -43,6 +43,10 @@ Model.products = [{
     price: 59.99
 }];
 
+Model.getTitle = function (productId) {
+    return this.findProduct_knowingId(productId).title
+}
+
 Model.user = null;
 
 Model.users = [{
@@ -176,6 +180,10 @@ Model.findProduct_inCart = function (productID) {
     return this.user.shoppingCart.find(item => item._id == productID)
 }
 
+Model.findProduct_knowingId = function (productId) {
+    return this.products.find(product => product._id == productId)
+}
+
 Model.findProduct_inProductsList = function (productID) {
     return this.products.find(item => item._id == productID)
 }
@@ -223,10 +231,6 @@ Model.findIndex_knowingID = function (list, ID) {
     return list.findIndex(item => item._id == ID)
 }
 
-Model.formatNumber = function (number) {
-    return (Math.round(number * 100) / 100).toFixed(2)
-}
-
 // Para el badge de cart
 Model.getTotalQty = function () {
     let totalQty = 0;
@@ -264,6 +268,30 @@ Model.getTotal_ofOrder = function (itemList) {
     }
 
     return total
+}
+
+Model.getSubtotal_ofOrder = function (itemList) {
+    let subtotal = 0;
+
+    for (item of itemList) {
+        subtotal += item.price * item.qty
+    }
+
+    return subtotal
+}
+
+Model.getTax_ofOrder = function (itemList) {
+    let tax = 0;
+
+    for (item of itemList) {
+        tax += (item.price * item.qty) * this.tax
+    }
+
+    return tax
+}
+
+Model.getTotal_ofOrderItem = function (itemQty, itemPrice) {
+    return (itemPrice + (itemPrice * this.tax)) * itemQty
 }
 
 /* Purchase */

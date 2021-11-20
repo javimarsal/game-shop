@@ -98,11 +98,16 @@
                 return getTotalQty()
             });
 
-            Handlebars.registerHelper('todayDate', function() {
+            Handlebars.registerHelper('todayDate', function () {
                 let today = new Date()
 
                 return today.toLocaleDateString()
             });
+
+            Handlebars.registerHelper('getTitle', function (productId) {
+                var result = Model.getTitle(productId)
+                return new Handlebars.SafeString(result);
+            })
 
             window.addEventListener('popstate', (event) => route(), false);
 
@@ -148,6 +153,21 @@
 
             Handlebars.registerHelper('getTotal_ofOrder', function (itemList) {
                 var result = Model.getTotal_ofOrder(itemList);
+                return new Handlebars.SafeString(result)
+            });
+
+            Handlebars.registerHelper('getSubtotal_ofOrder', function (itemList) {
+                var result = Model.getSubtotal_ofOrder(itemList);
+                return new Handlebars.SafeString(result)
+            });
+
+            Handlebars.registerHelper('getTax_ofOrder', function (itemList) {
+                var result = Model.getTax_ofOrder(itemList);
+                return new Handlebars.SafeString(result)
+            });
+
+            Handlebars.registerHelper('getTotal_ofOrderItem', function (itemQty, itemPrice) {
+                var result = Model.getTotal_ofOrderItem(itemQty, itemPrice);
                 return new Handlebars.SafeString(result)
             });
         });

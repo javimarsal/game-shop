@@ -6,26 +6,26 @@
     <div class="container">
         <!-- Profile data -->
         <div class="row">
-            <h2>Order Number</h2>
+            <h2>Order {{order.number}}</h2>
 
             <label for="staticDate" class="col-sm-2 col-form-label">Date: </label>
             <div class="col-sm-10">
-                <input type="text" readonly disabled class="form-control-plaintext" id="staticDate" value="Date">
+                <input type="text" readonly disabled class="form-control-plaintext" id="staticDate" value="{{formatDate order.date}}">
             </div>
 
             <label for="staticAddress" class="col-sm-2 col-form-label">Address: </label>
             <div class="col-sm-10">
-                <input type="text" readonly disabled class="form-control-plaintext" id="staticAddress" value="Address">
+                <input type="text" readonly disabled class="form-control-plaintext" id="staticAddress" value="{{order.address}}">
             </div>
 
             <label for="staticCardNumber" class="col-sm-2 col-form-label">Card number: </label>
             <div class="col-sm-10">
-                <input type="text" readonly disabled class="form-control-plaintext" id="staticCardNumber" value="Number">
+                <input type="text" readonly disabled class="form-control-plaintext" id="staticCardNumber" value="{{order.cardNumber}}">
             </div>
 
             <label for="staticCardHolder" class="col-sm-2 col-form-label">Card holder: </label>
             <div class="col-sm-10">
-                <input type="text" readonly disabled class="form-control-plaintext" id="staticCardHolder" value="Owner">
+                <input type="text" readonly disabled class="form-control-plaintext" id="staticCardHolder" value="{{order.cardOwner}}">
             </div>
         </div>
 
@@ -41,33 +41,30 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {{#each order.itemList}}
                     <tr>
-                        <td>Qty</td>
-                        <td>Product</td>
-                        <td>Total</td>
+                        <td>{{this.qty}}</td>
+                        <td>{{getTitle this.itemID}}</td>
+                        <td>{{formatPrice (getTotal_ofOrderItem this.qty this.price)}}</td>
                     </tr>
-                    <tr>
-                        <td>Qty</td>
-                        <td>Product</td>
-                        <td>Total</td>
-                    </tr>
+                    {{/each}}
                 </tbody>
             </table>
 
             <div class="mt-4 row">
                 <label for="staticSubtotal" class="col-sm-2 col-form-label">Subtotal: </label>
                 <div class="col-sm-10">
-                    <input type="text" readonly disabled class="form-control-plaintext" id="staticSubtotal" value="€ Subtotal">
+                    <input type="text" readonly disabled class="form-control-plaintext" id="staticSubtotal" value="{{formatPrice (getSubtotal_ofOrder order.itemList)}}">
                 </div>
 
                 <label for="staticTax" class="col-sm-2 col-form-label">Tax: </label>
                 <div class="col-sm-10">
-                    <input type="text" readonly disabled class="form-control-plaintext" id="staticTax" value="€ Tax">
+                    <input type="text" readonly disabled class="form-control-plaintext" id="staticTax" value="{{formatPrice (getTax_ofOrder order.itemList)}}">
                 </div>
 
                 <label for="staticTotal" class="col-sm-2 col-form-label">Total: </label>
                 <div class="col-sm-10">
-                    <input type="text" readonly disabled class="form-control-plaintext" id="staticTotal" value="€ Total">
+                    <input type="text" readonly disabled class="form-control-plaintext" id="staticTotal" value="{{formatPrice (getTotal_ofOrder order.itemList)}}">
                 </div>
             </div>
         </div>
