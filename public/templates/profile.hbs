@@ -38,6 +38,7 @@
 
         <!-- Table of Orders -->
         <div class="mt-5">
+            {{#if user.orders}}
             <h2>Order list</h2>
             <table class="table table-striped align-middle">
                 <thead>
@@ -75,6 +76,9 @@
                     </tr>
                 </tbody>
             </table>
+            {{else}}
+            <h2>No orders yet</h2>
+            {{/if}}
         </div>
     </div>
 </main>
