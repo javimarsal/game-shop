@@ -180,6 +180,10 @@ Model.findProduct_inProductsList = function (productID) {
     return this.products.find(item => item._id == productID)
 }
 
+Model.findOrder_knowingNumber = function (number) {
+    return this.user.orders.find(order => order.number == number)
+}
+
 /* DeleteOne de Cart */
 Model.deleteOne = function (productID) {
     // Buscar el producto en el shoppingCart de user
@@ -295,4 +299,8 @@ Model.purchase = function (purchaseForm, IDitemList, purchaseNumber) {
 
     // Vaciamos el shoppingCart
     this.emptyShoppingCart();
+}
+
+Model.getOrder = function (number) {
+    return this.findOrder_knowingNumber(number)
 }
