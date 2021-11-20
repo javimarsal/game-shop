@@ -61,6 +61,15 @@ Model.users = [{
     orders: []
 }];
 
+Model.getUserShoppingCart = function () {
+    return this.user.shoppingCart
+}
+
+Model.emptyShoppingCart = function () {
+    // Elimina todos los items y limpia la lista
+    this.user.shoppingCart.splice(0, this.user.shoppingCart.length)
+}
+
 Model.tax = 0.21;
 
 /* Sign In */
@@ -239,4 +248,39 @@ Model.getSubtotal = function () {
 // Añadir el tax al price
 Model.getSubtotal_addedTax = function () {
     return this.getSubtotal()*this.tax
+}
+
+/* Purchase */
+Model.purchase = function (purchaseForm, IDitemList, purchaseNumber) {
+    // Nueva order
+    let newOrder = {
+        number: purchaseNumber,
+        date: purchaseForm.date,
+        address: purchaseForm.address,
+        cardNumber: purchaseForm.cardNumber,
+        cardOwner: purchaseForm.cardOwner,
+        itemList: [/*itemID, qty, price*/]
+    }
+
+    // Construimos los orderItems
+    for (id of IDitemList) {
+        // Buscamos el item en la lista de Productos
+        let item = this.findProduct_inProductsList(id)
+
+        // Buscamos el item en la shoppingCart para obtener qty
+        let orderQty = this.findProduct_inCart(id).qty
+
+        // Añadimos el item a la itemsList de order
+        newOrder.itemList.push({
+            itemID: item._id,
+            qty: orderQty,
+            price: item.price
+        });
+    }
+
+    // Añadir el order al user
+    this.user.orders.push(newOrder)
+
+    // Vaciamos el shoppingCart
+    this.emptyShoppingCart();
 }

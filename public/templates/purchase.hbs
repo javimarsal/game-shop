@@ -18,19 +18,19 @@
 
             <div>
                 <label for="address" hidden></label>
-                <input type="text" class="form-control" name="address" placeholder="Address" required>
+                <input id="address" type="text" class="form-control" name="address" placeholder="Address" required>
                 <div class="invalid-feedback">Please, provide an Address</div>
             </div>
 
             <div>
                 <label for="cardNumber" hidden></label>
-                <input type="text" class="form-control" name="cardNumber" placeholder="Card Number" required>
+                <input id="cardNumber" type="text" class="form-control" name="cardNumber" placeholder="Card Number" required>
                 <div class="invalid-feedback">Please, provide a Card Number</div>
             </div>
             
             <div>
                 <label for="cardOwner" hidden></label>
-                <input type="text" class="form-control" name="cardOwner" placeholder="Card Owner" required>
+                <input id="cardOwner" type="text" class="form-control" name="cardOwner" placeholder="Card Owner" required>
                 <div class="invalid-feedback">Please, provide the Name of the Card Owner</div>
             </div>
         </form>
@@ -97,7 +97,34 @@
         form.classList.add('was-validated');
 
         if (form.checkValidity()) {
+            // datos del formulario
+            let purchaseDate = new Date();
+            let purchaseAddress = $('#address').val();
+            let purchaseCardNumber = $('#cardNumber').val();
+            let purchaseCardOwner = $('#cardOwner').val();
 
+            // Objeto purchaseForm
+            let purchaseForm = {
+                date: purchaseDate,
+                address: purchaseAddress,
+                cardNumber: purchaseCardNumber,
+                cardOwner: purchaseCardOwner
+            }
+
+            // Recogemos los ID de los items del shoppingCart
+            let IDitemList = [];
+            for (item of Model.getUserShoppingCart()) {
+                IDitemList.push(item._id)
+            }
+
+            // Generamos un número para el order
+            let purchaseNumber = new Date().getTime();
+
+            // Realizamos la compra
+            Model.purchase(purchaseForm, IDitemList, purchaseNumber)
+
+            // Volvemos a la página principal
+            navigateTo(event, '/')
         }
     }
 </script>
