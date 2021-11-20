@@ -10,27 +10,27 @@
 
             <label for="staticName" class="col-sm-2 col-form-label">Name: </label>
             <div class="col-sm-10">
-                <input type="text" readonly disabled class="form-control-plaintext" id="staticName" value="Name">
+                <input type="text" readonly disabled class="form-control-plaintext" id="staticName" value="{{user.name}}">
             </div>
 
             <label for="staticSurname" class="col-sm-2 col-form-label">Surname: </label>
             <div class="col-sm-10">
-                <input type="text" readonly disabled class="form-control-plaintext" id="staticSurname" value="Surname">
+                <input type="text" readonly disabled class="form-control-plaintext" id="staticSurname" value="{{user.surname}}">
             </div>
 
             <label for="staticBirth" class="col-sm-2 col-form-label">Birth: </label>
             <div class="col-sm-10">
-                <input type="text" readonly disabled class="form-control-plaintext" id="staticBirth" value="Birth data">
+                <input type="text" readonly disabled class="form-control-plaintext" id="staticBirth" value="{{formatDate user.birth}}">
             </div>
 
             <label for="staticAddress" class="col-sm-2 col-form-label">Address: </label>
             <div class="col-sm-10">
-                <input type="text" readonly disabled class="form-control-plaintext" id="staticAddress" value="Address">
+                <input type="text" readonly disabled class="form-control-plaintext" id="staticAddress" value="{{user.address}}">
             </div>
 
             <label for="staticEmail" class="col-sm-2 col-form-label">Email: </label>
             <div class="col-sm-10">
-                <input type="text" readonly disabled class="form-control-plaintext" id="staticEmail" value="Email address">
+                <input type="text" readonly disabled class="form-control-plaintext" id="staticEmail" value="{{user.email}}">
             </div>
         </div>
 

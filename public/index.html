@@ -83,13 +83,16 @@
                 return new Handlebars.SafeString(result);
             });
 
+            Handlebars.registerHelper('formatDate', function (date) {
+                return date.toLocaleDateString()
+            })
+
             Handlebars.registerHelper('totalQty', function () {
                 return getTotalQty()
             });
 
             Handlebars.registerHelper('todayDate', function() {
-                let timeElapsed = Date.now();
-                let today = new Date(timeElapsed);
+                let today = new Date()
 
                 return today.toLocaleDateString()
             });
