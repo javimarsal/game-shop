@@ -48,12 +48,11 @@
                         </li>
                         {{/unless}}
 
+                        {{!-- Si el usuario ha iniciado sesión, se muestra el li de Sign out y View profile --}}
+                        {{#if user}}
                         <li>
                             <a class="dropdown-item" href="profile" onclick="navigateTo(event, event.target.href)">View profile</a>
                         </li>
-
-                        {{!-- Si el usuario ha iniciado sesión, se muestra el li de Sign out --}}
-                        {{#if user}}
                         <li>
                             <hr class="dropdown-divider">
                         </li>
