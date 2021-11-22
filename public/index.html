@@ -106,8 +106,33 @@
 
             Handlebars.registerHelper('getTitle', function (productId) {
                 var result = Model.getTitle(productId)
-                return new Handlebars.SafeString(result);
+                return new Handlebars.SafeString(result)
             })
+
+            Handlebars.registerHelper('getPrice', function (productId) {
+                var result = Model.getPrice(productId)
+                return new Handlebars.SafeString(result)
+            })
+
+            Handlebars.registerHelper('getTotal_ofCartItem', function (productId, qty) {
+                var result = Model.getTotal_ofCartItem(productId, qty)
+                return new Handlebars.SafeString(result)
+            })
+
+            Handlebars.registerHelper('getSubtotal', function (listOfItems) {
+                var result = Model.getSubtotal(listOfItems);
+                return new Handlebars.SafeString(result)
+            });
+
+            Handlebars.registerHelper('getTotalTax', function (listOfItems) {
+                var result = Model.getTotalTax(listOfItems);
+                return new Handlebars.SafeString(result)
+            });
+
+            Handlebars.registerHelper('getTotal', function (listOfItems) {
+                var result = Model.getTotal(listOfItems);
+                return new Handlebars.SafeString(result)
+            });
 
             window.addEventListener('popstate', (event) => route(), false);
 
@@ -123,33 +148,12 @@
 
     <!-- Scripts para cart, purchase y order -->
     <script>
-        function getSubtotal () {
-            return Model.getSubtotal()
-        }
-        
-        function getTax () {
-            return Model.getSubtotal_addedTax()
-        }
-
-        function getTotal () {
-            return getSubtotal() + getTax()
-        }
-
         $(function() {
-            Handlebars.registerHelper('getSubtotal', function () {
-                var result = getSubtotal();
-                return new Handlebars.SafeString(result)
-            });
+            
 
-            Handlebars.registerHelper('getTax', function () {
-                var result = getTax();
-                return new Handlebars.SafeString(result)
-            });
+            
 
-            Handlebars.registerHelper('getTotal', function () {
-                var result = getTotal();
-                return new Handlebars.SafeString(result)
-            });
+            
 
             Handlebars.registerHelper('getTotal_ofOrder', function (itemList) {
                 var result = Model.getTotal_ofOrder(itemList);

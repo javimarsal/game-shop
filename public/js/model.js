@@ -49,9 +49,56 @@ Model.products = [{
     tax: 6.93
 }];
 
+// Obtener título de un producto pasando su id
 Model.getTitle = function (productId) {
-    return this.findProduct_knowingId(productId).title
+    return this.findProduct_byId(productId).title
 }
+
+// Obtener precio de un producto pasando su id
+Model.getPrice = function (productId) {
+    return this.findProduct_byId(productId).price
+}
+
+// Obtener precio de un producto pasando su id
+Model.getTax_ofProduct = function (productId) {
+    return this.findProduct_byId(productId).tax
+}
+
+// Obtener total de un producto del carrito pasando su id y cantidad
+Model.getTotal_ofCartItem = function (productId, qty) {
+    let productPrice = this.getPrice(productId)
+    let productTax = this.getTax_ofProduct(productId)
+
+    return qty * (productPrice + productTax)
+}
+
+// Calcular subtotal de una lista
+Model.getSubtotal = function (listOfItems) {
+    let subtotal = 0;
+
+    for (item of listOfItems) {
+        subtotal += (this.getPrice(item._id) * item.qty)
+    }
+
+    return subtotal
+}
+
+// Calcular tax total de una lista
+Model.getTotalTax = function (listOfItems) {
+    let totalTax = 0;
+
+    for (item of listOfItems) {
+        totalTax += (this.getTax_ofProduct(item._id) * item.qty)
+    }
+
+    return totalTax
+}
+
+// Calcular total de una lista
+Model.getTotal = function (listOfItems) {
+    return this.getSubtotal(listOfItems) + this.getTotalTax(listOfItems)
+}
+
 
 Model.user = null;
 
@@ -171,7 +218,7 @@ Model.findProduct_inCart = function (productID) {
     return this.user.shoppingCart.find(item => item._id == productID)
 }
 
-Model.findProduct_knowingId = function (productId) {
+Model.findProduct_byId = function (productId) {
     return this.products.find(product => product._id == productId)
 }
 
@@ -184,42 +231,31 @@ Model.findOrder_knowingNumber = function (number) {
 }
 
 /* DeleteOne de Cart */
-Model.deleteOne = function (productID) {
+Model.deleteOne = function (productId) {
     // Buscar el producto en el shoppingCart de user
-    let productInCart = this.findProduct_inCart(productID)
+    let productInCart = this.findProduct_inCart(productId)
 
     // Si solo hay 1 producto, lo eliminamos del shoppingCart de user
     if (productInCart.qty == 1) {
-        // índice del producto en shoppingCart
-        let productIndex = this.findIndex_knowingID(this.user.shoppingCart, productID)
-
-        // eliminar el producto de shoppingCart
-        this.user.shoppingCart.splice(productIndex, 1)
-        
-        return undefined
+        this.deleteItem(productId)
     }
     else {
         // restar 1 a su qty
         productInCart.qty--;
-        
-        // actualizar su total
-        productInCart.total -= productInCart.price;
-
-        return productInCart
     }
 }
 
-/* DeleteAll de Cart */
-Model.deleteAll = function (productID) {
+/* DeleteItem de Cart */
+Model.deleteItem = function (productId) {
     // índice del producto en shoppingCart
-    let productIndex = this.findIndex_knowingID(this.user.shoppingCart, productID)
+    let productIndex = this.findIndex_byId(this.user.shoppingCart, productId)
 
     // eliminar el producto de shoppingCart
     this.user.shoppingCart.splice(productIndex, 1)
 }
 
-Model.findIndex_knowingID = function (list, ID) {
-    return list.findIndex(item => item._id == ID)
+Model.findIndex_byId = function (listOfItems, Id) {
+    return listOfItems.findIndex(item => item._id == Id)
 }
 
 // Para el badge de cart
@@ -231,22 +267,6 @@ Model.getTotalQty = function () {
     }
 
     return totalQty
-}
-
-// Calcular subtotal
-Model.getSubtotal = function () {
-    let subtotal = 0;
-
-    for (item of this.user.shoppingCart) {
-        subtotal += item.total
-    }
-
-    return subtotal
-}
-
-// Añadir el tax al price
-Model.getSubtotal_addedTax = function () {
-    return this.getSubtotal()*this.tax
 }
 
 // Calcular total (subtotal + tax)
