@@ -50,8 +50,8 @@
                     {{#each user.shoppingCart}}
                     <tr>
                         <td>{{this.qty}}</td>
-                        <td>{{this.title}}</td>
-                        <td>{{formatPrice this.total}}</td>
+                        <td>{{getTitle this._id}}</td>
+                        <td>{{formatPrice (getTotal_ofCartItem this._id this.qty)}}</td>
                     </tr>
                     {{/each}}
                 </tbody>
@@ -60,17 +60,17 @@
             <div class="mt-4 row">
                 <label for="staticSubtotal" class="col-sm-2 col-form-label">Subtotal: </label>
                 <div class="col-sm-10">
-                    <input type="text" readonly disabled class="form-control-plaintext" id="staticSubtotal" value="{{formatPrice (getSubtotal)}}">
+                    <input type="text" readonly disabled class="form-control-plaintext" id="staticSubtotal" value="{{formatPrice (getSubtotal user.shoppingCart)}}">
                 </div>
 
                 <label for="staticTax" class="col-sm-2 col-form-label">Tax: </label>
                 <div class="col-sm-10">
-                    <input type="text" readonly disabled class="form-control-plaintext" id="staticTax" value="{{formatPrice (getTax)}}">
+                    <input type="text" readonly disabled class="form-control-plaintext" id="staticTax" value="{{formatPrice (getTotalTax user.shoppingCart)}}">
                 </div>
 
                 <label for="staticTotal" class="col-sm-2 col-form-label">Total: </label>
                 <div class="col-sm-10">
-                    <input type="text" readonly disabled class="form-control-plaintext" id="staticTotal" value="{{formatPrice (getTotal)}}">
+                    <input type="text" readonly disabled class="form-control-plaintext" id="staticTotal" value="{{formatPrice (getTotal user.shoppingCart)}}">
                 </div>
             </div>
             
@@ -112,16 +112,16 @@
             }
 
             // Recogemos los ID de los items del shoppingCart
-            let IDitemList = [];
+            let listOfIdItems = [];
             for (item of Model.getUserShoppingCart()) {
-                IDitemList.push(item._id)
+                listOfIdItems.push(item._id)
             }
 
             // Generamos un número para el order
             let purchaseNumber = new Date().getTime();
 
             // Realizamos la compra
-            Model.purchase(purchaseForm, IDitemList, purchaseNumber)
+            Model.purchase(purchaseForm, listOfIdItems, purchaseNumber)
 
             // Volvemos a la página principal
             navigateTo(event, `/order/id/${purchaseNumber}`)

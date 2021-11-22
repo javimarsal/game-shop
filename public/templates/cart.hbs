@@ -6,6 +6,7 @@
     <div class="container">
         <h1>Shopping Cart</h1>
 
+        {{#if user.shoppingCart}}
         <!-- Total on the Top -->
         <div class="row">
             <label for="staticTotalTop" class="col-sm-2 col-form-label">Total: </label>
@@ -14,8 +15,7 @@
             </div>
         </div>
 
-        {{!-- Mostrar los items si el Shopping Cart tiene items --}}
-        {{#if user.shoppingCart}}
+        <!-- Mostrar los items si el Shopping Cart tiene items -->
         <div class="mt-2">
             <h2>Items</h2>
             <table class="table table-striped align-middle">

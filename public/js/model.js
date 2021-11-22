@@ -214,16 +214,12 @@ Model.buy = function (productId) {
     }
 }
 
-Model.findProduct_inCart = function (productID) {
-    return this.user.shoppingCart.find(item => item._id == productID)
+Model.findProduct_inCart = function (productId) {
+    return this.user.shoppingCart.find(item => item._id == productId)
 }
 
 Model.findProduct_byId = function (productId) {
     return this.products.find(product => product._id == productId)
-}
-
-Model.findProduct_inProductsList = function (productID) {
-    return this.products.find(item => item._id == productID)
 }
 
 Model.findOrder_knowingNumber = function (number) {
@@ -306,7 +302,7 @@ Model.getTotal_ofOrderItem = function (itemQty, itemPrice) {
 }
 
 /* Purchase */
-Model.purchase = function (purchaseForm, IDitemList, purchaseNumber) {
+Model.purchase = function (purchaseForm, listOfIdItems, purchaseNumber) {
     // Nueva order
     let newOrder = {
         number: purchaseNumber,
@@ -314,22 +310,23 @@ Model.purchase = function (purchaseForm, IDitemList, purchaseNumber) {
         address: purchaseForm.address,
         cardNumber: purchaseForm.cardNumber,
         cardOwner: purchaseForm.cardOwner,
-        itemList: [/*itemID, qty, price*/]
+        itemList: []
     }
 
     // Construimos los orderItems
-    for (id of IDitemList) {
+    for (id of listOfIdItems) {
         // Buscamos el item en la lista de Productos
-        let item = this.findProduct_inProductsList(id)
+        let product = this.findProduct_byId(id)
 
         // Buscamos el item en la shoppingCart para obtener qty
         let orderQty = this.findProduct_inCart(id).qty
 
         // Añadimos el item a la itemsList de order
         newOrder.itemList.push({
-            itemID: item._id,
+            itemId: product._id,
             qty: orderQty,
-            price: item.price
+            price: product.price,
+            tax: product.tax
         });
     }
 
