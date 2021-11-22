@@ -23,10 +23,10 @@
                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-
                     labelledby="cartDropdown">
                         <li>
-                            <a class="dropdown-item" href="cart" onclick="navigateTo(event, event.target.href)">View cart</a>
+                            <a class="dropdown-item" href="/cart" onclick="navigateTo(event, event.target.href)">View cart</a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="purchase" onclick="navigateTo(event, event.target.href)">Checkout</a>
+                            <a class="dropdown-item" href="/purchase" onclick="navigateTo(event, event.target.href)">Checkout</a>
                         </li>
                     </ul>
                 </li>
@@ -40,18 +40,18 @@
                         {{!-- Si user es falsy (no se ha iniciado sesión), muestra el li de Sign up y Sign in --}}
                         {{#unless user}}
                         <li>
-                            <a class="dropdown-item" href="signup" onclick="navigateTo(event, event.target.href)">Sign up</a>
+                            <a class="dropdown-item" href="/signup" onclick="navigateTo(event, event.target.href)">Sign up</a>
                         </li>
                         
                         <li>
-                            <a class="dropdown-item" href="signin" onclick="navigateTo(event, event.target.href)">Sign in</a>
+                            <a class="dropdown-item" href="/signin" onclick="navigateTo(event, event.target.href)">Sign in</a>
                         </li>
                         {{/unless}}
 
                         {{!-- Si el usuario ha iniciado sesión, se muestra el li de Sign out y View profile --}}
                         {{#if user}}
                         <li>
-                            <a class="dropdown-item" href="profile" onclick="navigateTo(event, event.target.href)">View profile</a>
+                            <a class="dropdown-item" href="/profile" onclick="navigateTo(event, event.target.href)">View profile</a>
                         </li>
                         <li>
                             <hr class="dropdown-divider">

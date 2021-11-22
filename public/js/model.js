@@ -222,8 +222,12 @@ Model.findProduct_byId = function (productId) {
     return this.products.find(product => product._id == productId)
 }
 
-Model.findOrder_knowingNumber = function (number) {
+Model.findOrder_byNumber = function (number) {
     return this.user.orders.find(order => order.number == number)
+}
+
+Model.findIndex_byId = function (listOfItems, Id) {
+    return listOfItems.findIndex(item => item._id == Id)
 }
 
 /* DeleteOne de Cart */
@@ -248,10 +252,6 @@ Model.deleteItem = function (productId) {
 
     // eliminar el producto de shoppingCart
     this.user.shoppingCart.splice(productIndex, 1)
-}
-
-Model.findIndex_byId = function (listOfItems, Id) {
-    return listOfItems.findIndex(item => item._id == Id)
 }
 
 // Para el badge de cart
@@ -330,5 +330,5 @@ Model.purchase = function (purchaseForm, listOfIdItems, purchaseNumber) {
 }
 
 Model.getOrder = function (number) {
-    return this.findOrder_knowingNumber(number)
+    return this.findOrder_byNumber(number)
 }
