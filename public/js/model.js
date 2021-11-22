@@ -265,40 +265,32 @@ Model.getTotalQty = function () {
     return totalQty
 }
 
-// Calcular total (subtotal + tax)
-Model.getTotal_ofOrder = function (itemList) {
-    let total = 0;
-
-    // Recorremos la lista de items de la Order
-    for (item of itemList) {
-        total += (item.price + (item.price * this.tax)) * item.qty
-    }
-
-    return total
-}
-
-Model.getSubtotal_ofOrder = function (itemList) {
+Model.getSubtotal_ofOrder = function (orderList) {
     let subtotal = 0;
 
-    for (item of itemList) {
+    for (item of orderList) {
         subtotal += item.price * item.qty
     }
 
     return subtotal
 }
 
-Model.getTax_ofOrder = function (itemList) {
+Model.getTax_ofOrder = function (orderList) {
     let tax = 0;
 
-    for (item of itemList) {
-        tax += (item.price * item.qty) * this.tax
+    for (item of orderList) {
+        tax += item.tax * item.qty
     }
 
     return tax
 }
 
-Model.getTotal_ofOrderItem = function (itemQty, itemPrice) {
-    return (itemPrice + (itemPrice * this.tax)) * itemQty
+Model.getTotal_ofOrder = function (orderList) {
+    return this.getSubtotal_ofOrder(orderList) + this.getTax_ofOrder(orderList)
+}
+
+Model.getTotal_ofOrderItem = function (orderQty, orderPrice, orderTax) {
+    return (orderPrice + orderTax) * orderQty
 }
 
 /* Purchase */

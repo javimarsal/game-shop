@@ -119,6 +119,11 @@
                 return new Handlebars.SafeString(result)
             })
 
+            Handlebars.registerHelper('getTotal_ofOrderItem', function (orderQty, orderPrice, orderTax) {
+                var result = Model.getTotal_ofOrderItem(orderQty, orderPrice, orderTax);
+                return new Handlebars.SafeString(result)
+            })
+
             Handlebars.registerHelper('getSubtotal', function (listOfItems) {
                 var result = Model.getSubtotal(listOfItems);
                 return new Handlebars.SafeString(result)
@@ -134,6 +139,21 @@
                 return new Handlebars.SafeString(result)
             });
 
+            Handlebars.registerHelper('getSubtotal_ofOrder', function (orderList) {
+                var result = Model.getSubtotal_ofOrder(orderList);
+                return new Handlebars.SafeString(result)
+            });
+
+            Handlebars.registerHelper('getTax_ofOrder', function (orderList) {
+                var result = Model.getTax_ofOrder(orderList);
+                return new Handlebars.SafeString(result)
+            });
+
+            Handlebars.registerHelper('getTotal_ofOrder', function (orderList) {
+                var result = Model.getTotal_ofOrder(orderList);
+                return new Handlebars.SafeString(result)
+            });
+
             window.addEventListener('popstate', (event) => route(), false);
 
             // Partials
@@ -142,37 +162,6 @@
             loadPartial('/partials/footer.hbs', 'footer')
             ).always(function () {
                 route();
-            });
-        });
-    </script>
-
-    <!-- Scripts para cart, purchase y order -->
-    <script>
-        $(function() {
-            
-
-            
-
-            
-
-            Handlebars.registerHelper('getTotal_ofOrder', function (itemList) {
-                var result = Model.getTotal_ofOrder(itemList);
-                return new Handlebars.SafeString(result)
-            });
-
-            Handlebars.registerHelper('getSubtotal_ofOrder', function (itemList) {
-                var result = Model.getSubtotal_ofOrder(itemList);
-                return new Handlebars.SafeString(result)
-            });
-
-            Handlebars.registerHelper('getTax_ofOrder', function (itemList) {
-                var result = Model.getTax_ofOrder(itemList);
-                return new Handlebars.SafeString(result)
-            });
-
-            Handlebars.registerHelper('getTotal_ofOrderItem', function (itemQty, itemPrice) {
-                var result = Model.getTotal_ofOrderItem(itemQty, itemPrice);
-                return new Handlebars.SafeString(result)
             });
         });
     </script>
