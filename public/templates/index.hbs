@@ -29,11 +29,11 @@
 {{> footer}}
 
 <script>
-    function buy_clicked(event, productID) {
+    function buy_clicked(event, productId) {
         event.preventDefault();
         
         // Se añade el producto al carrito del usuario
-        Model.buy(productID);
+        Model.buy(productId);
 
         navigateTo(event, '/cart')
     }

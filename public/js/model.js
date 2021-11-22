@@ -147,29 +147,20 @@ Model.searchMaxId_inUsersList = function () {
 }
 
 /* Buy */
-Model.buy = function (productID) {
+Model.buy = function (productId) {
     // Buscar el producto en el shoppingCart de user
-    let productInCart = this.findProduct_inCart(productID)
+    let productInCart = this.findProduct_inCart(productId)
 
     // Si el producto está en el shoppingCart
     if (productInCart) {
         // Aumentamos en 1 su qty
         productInCart.qty++;
-
-        // Actualizamos el precio total
-        productInCart.total += productInCart.price;
     }
     else {
-        // Buscar el producto en la lista products
-        let p_inProductList = this.findProduct_inProductsList(productID)
-
         // Añadimos el producto al shoppingCart
         let newItem = {
-            _id: p_inProductList._id,
-            qty: 1,
-            title: p_inProductList.title,
-            price: p_inProductList.price,
-            total: p_inProductList.price
+            _id: productId,
+            qty: 1
         }
 
         this.user.shoppingCart.push(newItem);
