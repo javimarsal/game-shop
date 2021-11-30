@@ -2,6 +2,8 @@
 
 {{> header}}
 
+{{> messages}}
+
 <main>
     <div class="container">
         <div class="row gy-4">
@@ -16,7 +18,7 @@
                     <div class="card-body">
                         <p class="card-text">{{this.description}}</p>
 
-                        <button class="btn btn-primary card-button {{#unless ../user}} disabled {{/unless}}" role="button" onclick="buy_clicked(event, {{this._id}})">Buy</button>
+                        <button class="btn btn-primary card-button {{#unless ../user}} disabled {{/unless}}" role="button" onclick="addItem(event, {{this._id}})">Buy</button>
                         <span class="card-price">{{formatPrice this.price}}</span>
                     </div>
                 </div>
@@ -29,12 +31,13 @@
 {{> footer}}
 
 <script>
-    function buy_clicked(event, productId) {
+    function addItem (event, pid) {
         event.preventDefault();
-        
-        // Se añade el producto al carrito del usuario
-        Model.buy(productId);
 
-        navigateTo(event, '/cart')
+        Model.addItem(pid).done(function () {
+            route();
+        }).fail(function() {
+            console.error('ADDITEM ERROR ', error.status, error.statusText);
+        });
     }
 </script>

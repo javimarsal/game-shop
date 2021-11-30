@@ -2,6 +2,8 @@
 
 {{> header}}
 
+{{> messages}}
+
 <main>
     <div class="container">
         <form id="signin-form" class="col-10 col-md-6 col-lg-4 col-xl-3 needs-validation" novalidate>
@@ -30,13 +32,21 @@
 <script>
     function signin_clicked(event) {
         event.preventDefault();
+        event.stopPropagation();
+
         var form = document.getElementById('signin-form');
-        form.classList.add('was-validated');
-        
-        if(form.checkValidity()) {
-            Model.signin($('#email').val(), $('#password').val());
-            if(Model.user) navigateTo(event, '/')
-            else navigateTo(event, '/signin')
+
+        if (!form.checkValidity()) {
+            form.classList.add('was-validated');
+            return false;
         }
+        
+        Model.signin($('#email').val(), $('#password').val()).done(function (user) {
+            Messages.success.push('Welcome back!');
+            navigateTo(event, '/');
+        }).fail(function (error) {
+            Messages.danger.push(`${error.statusText} (${error.status}): ${error.responseJSON.message}`);
+            navigateTo(event, '/signin');
+        });
     }
 </script>

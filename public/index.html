@@ -32,6 +32,9 @@
     <!-- model.js -->
     <script src="js/model.js"></script>
 
+    <!-- messages.js -->
+    <script src="js/messages.js"></script>
+
     <!-- load the template -->
     <script>
         function render(url, container, context) {
@@ -67,20 +70,82 @@
         function route() {
             var path = location.pathname;
             var matches = null;
+            var context = {
+                user: Model.getUserId(),
+                messages: {
+                    success: Messages.success,
+                    danger: Messages.danger
+                }
+            };
+            Messages.clear();
+
+            var cartQtyP = Model.getCartQty().done(function (cartQty) {
+                context.cartQty = cartQty;
+            }).fail(function () {
+                console.error('Cannot retrieve cart quantity');
+            });
             console.log('ROUTING ', path);
-            if (matches = path.match(/^\/$/))
-                render('/templates/index.hbs', '#content', Model);
-            else if (matches = path.match(/^\/([^\/]*)\/?$/))
-                render('/templates/' + matches[1] + '.hbs', '#content', Model);
-            else if (matches = path.match(/^\/order\/id\/([^\/]*)\/?$/)) {
-                var order = Model.getOrder(matches[1]);
-                if (order)
-                    render('/templates/order.hbs', '#content', {user: Model.user, order});
-                else
-                    render('/templates/not-found.hbs', '#content', Model)
+            
+            if (matches = path.match(/^\/$/)) {
+                var productsP = Model.getProducts().done(function (products) {
+                    context.products = products;
+                }).fail(function () {
+                    console.error('Cannot retrieve products');
+                });
+                $.when(cartQtyP, productsP).always(function () {
+                    render('/templates/index.hbs', '#content', context)
+                });
             }
-            else
-                console.error('ROUTING ', path);
+            else if (matches = path.match(/^\/order\/id\/([0-9^\/]+)\/?$/)) {
+                // Crear getOrder en el Model
+                var order = Model.getOrder(matches[1]);
+                context.order = order;
+                if (order) {
+                    $.when(cartQtyP).always(function() {
+                        render('/templates/order.hbs', '#content', context);
+                    });
+                }
+                else {
+                    $.when(cartQtyP).always(function() {
+                        render('/templates/not-found.hbs', '#content', context);
+                    });
+                }
+            }
+            else if (matches = path.match(/^\/signin\/?$/)) {
+                $.when(cartQtyP).always(function() {
+                    render('/templates/signin.hbs', '#content', context);
+                });
+            }
+            else if (matches = path.match(/^\/signup\/?$/)) {
+                $.when(cartQtyP).always(function() {
+                    render('/templates/signup.hbs', '#content', context);
+                });
+            }
+            else if (matches = path.match(/^\/cart\/?$/)) {
+                var cartP = Model.getCart().done(function (cart) {
+                    context.cartItems = cart;
+                }).fail(function () {
+                    console.error('Cannot retrieve cart');
+                });
+                $.when(cartQtyP, cartP).always(function() {
+                    render('/templates/cart.hbs', '#content', context);
+                });
+            }
+            else if (matches = path.match(/^\/profile\/?$/)) {
+                $.when(cartQtyP).always(function() {
+                    render('/templates/profile.hbs', '#content', context);
+                });
+            }
+            else if (matches = path.match(/^\/purchase\/?$/)) {
+                $.when(cartQtyP).always(function() {
+                    render('/templates/purchase.hbs', '#content', context);
+                });
+            }
+            else {
+                $.when(cartQtyP).always(function() {
+                    render('/templates/not-found.hbs', '#content', context);
+                });
+            }
         }
 
         $(function () {
@@ -104,18 +169,18 @@
                 return today.toLocaleDateString()
             });
 
-            Handlebars.registerHelper('getTitle', function (productId) {
-                var result = Model.getTitle(productId)
+            Handlebars.registerHelper('getTitle', function (product) {
+                var result = product.title;
                 return new Handlebars.SafeString(result)
             })
 
-            Handlebars.registerHelper('getPrice', function (productId) {
-                var result = Model.getPrice(productId)
+            Handlebars.registerHelper('getPrice', function (product) {
+                var result = product.price
                 return new Handlebars.SafeString(result)
             })
 
-            Handlebars.registerHelper('getTotal_ofCartItem', function (productId, qty) {
-                var result = Model.getTotal_ofCartItem(productId, qty)
+            Handlebars.registerHelper('getTotal_ofCartItem', function (product, qty) {
+                var result = qty * (product.price + product.tax)
                 return new Handlebars.SafeString(result)
             })
 
@@ -125,17 +190,32 @@
             })
 
             Handlebars.registerHelper('getSubtotal', function (listOfItems) {
-                var result = Model.getSubtotal(listOfItems);
+                var result = 0;
+
+                for (item of listOfItems) {
+                    result += item.qty * item.product.price
+                }
+
                 return new Handlebars.SafeString(result)
             });
 
             Handlebars.registerHelper('getTotalTax', function (listOfItems) {
-                var result = Model.getTotalTax(listOfItems);
+                var result = 0;
+
+                for (item of listOfItems) {
+                    result += item.qty * item.product.tax
+                }
+
                 return new Handlebars.SafeString(result)
             });
 
             Handlebars.registerHelper('getTotal', function (listOfItems) {
-                var result = Model.getTotal(listOfItems);
+                var result = 0;
+
+                for (item of listOfItems) {
+                    result += item.qty * (item.product.price + item.product.tax)
+                }
+
                 return new Handlebars.SafeString(result)
             });
 
@@ -158,8 +238,9 @@
 
             // Partials
             $.when(loadPartial('/partials/navbar.hbs', 'navbar'),
-            loadPartial('/partials/header.hbs', 'header'),
-            loadPartial('/partials/footer.hbs', 'footer')
+                loadPartial('/partials/header.hbs', 'header'),
+                loadPartial('/partials/footer.hbs', 'footer'),
+                loadPartial('/partials/messages.hbs', 'messages')
             ).always(function () {
                 route();
             });

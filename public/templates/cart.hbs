@@ -2,16 +2,18 @@
 
 {{> header}}
 
+{{> messages}}
+
 <main>
     <div class="container">
         <h1>Shopping Cart</h1>
 
-        {{#if user.shoppingCart}}
+        {{#if cartItems}}
         <!-- Total on the Top -->
         <div class="row">
             <label for="staticTotalTop" class="col-sm-2 col-form-label">Total: </label>
             <div class="col-sm-10">
-                <input type="text" readonly disabled class="form-control-plaintext" id="staticTotalTop" value="{{formatPrice (getTotal user.shoppingCart)}}">
+                <input type="text" readonly disabled class="form-control-plaintext" id="staticTotalTop" value="{{formatPrice (getTotal cartItems)}}">
             </div>
         </div>
 
@@ -29,12 +31,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{#each user.shoppingCart}}
+                    {{#each cartItems}}
                     <tr>
                         <td>{{this.qty}}</td>
-                        <td>{{getTitle this._id}}</td>
-                        <td>{{formatPrice (getPrice this._id)}}</td>
-                        <td>{{formatPrice (getTotal_ofCartItem this._id this.qty)}}</td>
+                        <td>{{getTitle this.product}}</td>
+                        <td>{{formatPrice (getPrice this.product)}}</td>
+                        <td>{{formatPrice (getTotal_ofCartItem this.product this.qty)}}</td>
                         <td>
                             <div class="dropdown">
                                 <button href="#" class="btn btn-outline-danger dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
@@ -42,8 +44,8 @@
                                 </button>
 
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                    <li><button href="#" class="dropdown-item" onclick="deleteOne_clicked({{this._id}})">Delete one</button></li>
-                                    <li><button href="#" class="dropdown-item" onclick="deleteAll_clicked({{this._id}})">Delete all</button></li>
+                                    <li><button href="#" class="dropdown-item" onclick="deleteOne_clicked({{this.product._id}})">Delete one</button></li>
+                                    <li><button href="#" class="dropdown-item" onclick="deleteAll_clicked({{this.product._id}})">Delete all</button></li>
                                 </ul>
                             </div>
                         </td>
@@ -55,17 +57,17 @@
             <div class="mt-2 row">
                 <label for="staticSubtotal" class="col-sm-2 col-form-label">Subtotal: </label>
                 <div class="col-sm-10">
-                    <input type="text" readonly disabled class="form-control-plaintext" id="staticSubtotal" value="{{formatPrice (getSubtotal user.shoppingCart)}}">
+                    <input type="text" readonly disabled class="form-control-plaintext" id="staticSubtotal" value="{{formatPrice (getSubtotal cartItems)}}">
                 </div>
 
                 <label for="staticTax" class="col-sm-2 col-form-label">Tax: </label>
                 <div class="col-sm-10">
-                    <input type="text" readonly disabled class="form-control-plaintext" id="staticTax" value="{{formatPrice (getTotalTax user.shoppingCart)}}">
+                    <input type="text" readonly disabled class="form-control-plaintext" id="staticTax" value="{{formatPrice (getTotalTax cartItems)}}">
                 </div>
 
                 <label for="staticTotalBottom" class="col-sm-2 col-form-label">Total: </label>
                 <div class="col-sm-10">
-                    <input type="text" readonly disabled class="form-control-plaintext" id="staticTotalBottom" value="{{formatPrice (getTotal user.shoppingCart)}}">
+                    <input type="text" readonly disabled class="form-control-plaintext" id="staticTotalBottom" value="{{formatPrice (getTotal cartItems)}}">
                 </div>
             </div>
             
@@ -86,17 +88,19 @@
 {{> footer}}
 
 <script>
-    function deleteOne_clicked (productId) {
-        Model.deleteOne(productId);
-
-        // Render para refrescar los datos
-        route()
+    function deleteOne_clicked (pid) {
+        Model.removeItem(pid, false).done(function () {
+            route();
+        }).fail(function() {
+            console.error('DELETE ITEM ERROR ', error.status, error.statusText);
+        });
     }
 
-    function deleteAll_clicked (productId) {
-        Model.deleteItem(productId);
-
-        // Render para refrescar los datos
-        route()
+    function deleteAll_clicked (pid) {
+        Model.removeItem(pid, true).done(function () {
+            route();
+        }).fail(function() {
+            console.error('DELETE ITEM ERROR ', error.status, error.statusText);
+        });
     } 
 </script>
