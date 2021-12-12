@@ -124,8 +124,7 @@ Model.signin = function (email, password) {
     Model.user = null;
     for (var i = 0; i < Model.users.length; i++) {
         if (Model.users[i].email == email && Model.users[i].password == password) {
-            Model.user = Model.users[i];
-            return Model.user;
+            return Model.users[i];
         }
     }
     return null;
@@ -133,8 +132,6 @@ Model.signin = function (email, password) {
 
 /* Sign Up */
 Model.signup = function (newUserData) {
-    Model.user = null;
-
     // Comprobar que el correo no existe en la lista users
     if (!this.isEmailRegistered(newUserData.email)) {
         // Crear el nuevo usuario
@@ -162,9 +159,10 @@ Model.signup = function (newUserData) {
 }
 
 /* Sign Out */
-Model.signout = function () {
-    Model.user = null;
-}
+// Deprecated
+// Model.signout = function () {
+//     Model.user = null;
+// }
 
 Model.isEmailRegistered = function (email) {
     for (var i = 0; i < Model.users.length; i++) {

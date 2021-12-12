@@ -63,47 +63,52 @@
     function signup_clicked(event) {
         event.preventDefault();
         var form = document.getElementById('signup-form');
-        form.classList.add('was-validated');
+
+        // El formulario no es válido
+        if (!form.checkValidity()) {
+            form.classList.add('was-validated');
+            return false;
+        }
 
         // usuario que se crea (si todo va bien)
         let user = null;
 
-        if(form.checkValidity()) {
-            // Datos del formulario
-            let userName = $('#name').val();
-            let userSurname = $('#surname').val();
-            let userAddress = $('#address').val();
-            let userBirth = new Date($('#birth').val());
-            let userEmail = $('#email').val();
-            let userPass = $('#pass').val();
-            let userConfirmPass = $('#confirmPass').val();
+        // Datos del formulario
+        let userName = $('#name').val();
+        let userSurname = $('#surname').val();
+        let userAddress = $('#address').val();
+        let userBirth = new Date($('#birth').val());
+        let userEmail = $('#email').val();
+        let userPass = $('#pass').val();
+        let userConfirmPass = $('#confirmPass').val();
 
-            // Comprobar que las contraseñas coinciden
-            if(userPass == userConfirmPass) {
-                // Nuevo usuario
-                let newUser = {
-                    email: userEmail,
-                    password: userPass,
-                    name: userName,
-                    surname: userSurname,
-                    birth: userBirth,
-                    address: userAddress
-                }
-
-                // Se devolverá un usuario si el correo no está registrado
-                user = Model.signup(newUser);
-
-                // Si se ha creado
-                if(user) {
-                    // Navegamos a sigin
-                    navigateTo(event, '/signin')
-                }
+        // Comprobar que las contraseñas coinciden
+        if (userPass == userConfirmPass) {
+            // Nuevo usuario
+            let newUser = {
+                email: userEmail,
+                password: userPass,
+                name: userName,
+                surname: userSurname,
+                birth: userBirth,
+                address: userAddress
             }
-            
-            // Las contraseñas no coinciden o el usuario no se ha creado
-            if (userPass != userConfirmPass  ||  !user) {
+
+            // Se devolverá un usuario si el correo no está registrado
+            Model.signup(newUser).done(function (user) {
+                Messages.success.push('You\'ve been registered successfully!');
+                navigateTo(event, '/signin')
+            }).fail(function (error) {
+                Messages.danger.push(`${error.statusText} (${error.status}): ${error.responseJSON.message}`);
                 navigateTo(event, '/signup')
-            }
+            });
         }
+        
+        // Las contraseñas no coinciden o el usuario no se ha creado
+        if (userPass != userConfirmPass) {
+            Messages.danger.push('The passwords are not the same.')
+            navigateTo(event, '/signup')
+        }
+        
     }
 </script>

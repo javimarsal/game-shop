@@ -12,6 +12,14 @@ Model.signin = function (email, password) {
     });
 }
 
+Model.signup = function (user) {
+    return $.ajax({
+        url: '/api/users/signup',
+        method: 'POST',
+        data: { user }
+    })
+}
+
 Model.getUserId = function () {
     var uid = RegExp('uid=[^;]+').exec(document.cookie);
     if (uid) {

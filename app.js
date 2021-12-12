@@ -39,6 +39,15 @@ app.post('/api/users/signin', function (req, res, next) {
     return res.status(401).json({ message: 'Invalid credentials' });
 });
 
+app.post('/api/users/signup', function (req, res, next) {
+    var user = model.signup(req.body.user);
+    if (user) {
+        return res.json({});
+    }
+    // Precondition fail, email must be diferent (not registered)
+    return res.status(412).json({ message: 'User email already exists' });
+})
+
 app.get('/api/cart/qty', function (req, res, next) {
     var uid = req.cookies.uid;
     if (!uid) {
