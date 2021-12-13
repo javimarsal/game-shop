@@ -48,6 +48,21 @@ app.post('/api/users/signup', function (req, res, next) {
     return res.status(412).json({ message: 'User email already exists' });
 })
 
+app.get('/api/users/profile', function (req, res, next) {
+    var uid = req.cookies.uid;
+    if (!uid) {
+        return res.status(401).send({ message: 'User has not signed in' });
+    }
+
+    var user = model.getUserById(uid)
+
+    if (user) {
+        return res.json(user)
+    }
+
+    return res.status(500).json({ message: 'User information couldn\'t be found' })
+})
+
 app.get('/api/cart/qty', function (req, res, next) {
     var uid = req.cookies.uid;
     if (!uid) {

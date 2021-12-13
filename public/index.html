@@ -132,7 +132,12 @@
                 });
             }
             else if (matches = path.match(/^\/profile\/?$/)) {
-                $.when(cartQtyP).always(function() {
+                var profileP = Model.getProfile().done(function (user) {
+                    context.profile = user;
+                }).fail(function (error) {
+                    console.error(`${error.statusText} (${error.status}): ${error.responseJSON.message}`);
+                });
+                $.when(cartQtyP, profileP).always(function() {
                     render('/templates/profile.hbs', '#content', context);
                 });
             }
@@ -156,7 +161,7 @@
             });
 
             Handlebars.registerHelper('formatDate', function (date) {
-                return date.toLocaleDateString()
+                return new Date(date).toLocaleDateString()
             })
 
             Handlebars.registerHelper('totalQty', function () {

@@ -29,6 +29,13 @@ Model.getUserId = function () {
     return null;
 }
 
+Model.getProfile = function () {
+    return $.ajax({
+        url: '/api/users/profile',
+        method: 'GET'
+    });
+}
+
 Model.signout = function () {
     document.cookie = 'uid=;expires=0;path=/;'
 }
