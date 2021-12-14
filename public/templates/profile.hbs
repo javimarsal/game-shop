@@ -40,7 +40,7 @@
 
         <!-- Table of Orders -->
         <div class="mt-5">
-            {{#if profile.orders}}
+            {{#if orders}}
             <h2>Order list</h2>
             <table class="table table-striped align-middle">
                 <thead>
@@ -52,7 +52,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{#each profile.orders}}
+                    {{#each orders}}
                     <tr>
                         <td>{{formatDate this.date}}</td>
                         <td>{{this.number}}</td>

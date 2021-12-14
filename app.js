@@ -154,6 +154,16 @@ app.get('/api/orders/id/:oid', function (req, res, next) {
     return res.json(order);
 });
 
+app.get('/api/orders', function (req, res, next) {
+    var uid = req.cookies.uid;
+    if (!uid) {
+        return res.status(401).send({ message: 'User has not signed in' });
+    }
+
+    var orders = model.getOrders(uid);
+    return res.json(orders);
+});
+
 // Set redirection to index.html
 app.get(/\/.*/, function (req, res) {
     res.sendFile(path.join(__dirname, '/public/index.html'));

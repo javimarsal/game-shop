@@ -141,7 +141,14 @@
                 }).fail(function (error) {
                     console.error(`${error.statusText} (${error.status}): ${error.responseJSON.message}`);
                 });
-                $.when(cartQtyP, profileP).always(function() {
+
+                var ordersP = Model.getOrders().done(function (orders) {
+                    context.orders = orders;
+                }).fail(function () {
+                    console.error('Cannot retrieve orders');
+                });
+
+                $.when(cartQtyP, profileP, ordersP).always(function() {
                     render('/templates/profile.hbs', '#content', context);
                 });
             }

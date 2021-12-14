@@ -82,3 +82,10 @@ Model.getOrder = function (oid) {
         method: 'GET'
     });
 }
+
+Model.getOrders = function () {
+    return $.ajax({
+        url: '/api/orders',
+        method: 'GET'
+    });
+}

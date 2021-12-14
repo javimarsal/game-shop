@@ -322,4 +322,8 @@ Model.getOrder = function (orderNumber, uid) {
     return this.getOrder_byNumber(orderNumber, uid);
 }
 
+Model.getOrders = function (uid) {
+    return this.getUserById(uid).orders;
+}
+
 module.exports = Model;
