@@ -98,15 +98,19 @@
             }
             else if (matches = path.match(/^\/order\/id\/([0-9^\/]+)\/?$/)) {
                 // Crear getOrder en el Model
-                var order = Model.getOrder(matches[1]);
-                context.order = order;
-                if (order) {
-                    $.when(cartQtyP).always(function() {
+                var orderP = Model.getOrder(matches[1]).done(function (order) {
+                    context.order = order;
+                }).fail(function () {
+                    console.log('Cannot retrieve order')
+                });
+
+                if (orderP) {
+                    $.when(cartQtyP, orderP).always(function() {
                         render('/templates/order.hbs', '#content', context);
                     });
                 }
                 else {
-                    $.when(cartQtyP).always(function() {
+                    $.when(cartQtyP, orderP).always(function() {
                         render('/templates/not-found.hbs', '#content', context);
                     });
                 }
@@ -195,7 +199,7 @@
             })
 
             Handlebars.registerHelper('getTotal_ofOrderItem', function (orderQty, orderPrice, orderTax) {
-                var result = Model.getTotal_ofOrderItem(orderQty, orderPrice, orderTax);
+                var result = (orderPrice + orderTax) * orderQty;
                 return new Handlebars.SafeString(result)
             })
 
@@ -230,17 +234,37 @@
             });
 
             Handlebars.registerHelper('getSubtotal_ofOrder', function (orderList) {
-                var result = Model.getSubtotal_ofOrder(orderList);
-                return new Handlebars.SafeString(result)
+                let subtotal = 0;
+
+                for (item of orderList) {
+                    subtotal += item.price * item.qty;
+                }
+                
+                return new Handlebars.SafeString(subtotal)
             });
 
             Handlebars.registerHelper('getTax_ofOrder', function (orderList) {
-                var result = Model.getTax_ofOrder(orderList);
-                return new Handlebars.SafeString(result)
+                let tax = 0;
+
+                for (item of orderList) {
+                    tax += item.tax * item.qty
+                }
+                
+                return new Handlebars.SafeString(tax)
             });
 
             Handlebars.registerHelper('getTotal_ofOrder', function (orderList) {
-                var result = Model.getTotal_ofOrder(orderList);
+                var result = 0;
+                var subtotal = 0;
+                var tax = 0;
+
+                for (item of orderList) {
+                    subtotal += item.price * item.qty;
+                    tax += item.tax * item.qty;
+                }
+
+                result = subtotal + tax;
+                
                 return new Handlebars.SafeString(result)
             });
 

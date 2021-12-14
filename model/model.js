@@ -196,19 +196,19 @@ Model.addItem = function (uid, pid) {
     
     if (user && product) {
         for (var i = 0; i < user.cartItems.length; i++) {
-            var cartItems = user.cartItems[i];
-            if (cartItems.product._id == pid) {
-                cartItems.qty++;
+            var cartItem = user.cartItems[i];
+            if (cartItem.product._id == pid) {
+                cartItem.qty++;
                 return user.cartItems;
             }
         }
-        var cartItems = {
+        var cartItem = {
             _id: Model._cartItemsCount++,
             product: product,
             qty: 1
         };
-        user.cartItems.push(cartItems);
-        Model.cartItems.push(cartItems);
+        user.cartItems.push(cartItem);
+        Model.cartItems.push(cartItem);
         return user.cartItems;
     }
 
@@ -228,8 +228,8 @@ Model.getProduct_inCart = function (pId, uId) {
     return this.getUserById(uId).cartItems.find(item => item._id == pId)
 }
 
-Model.findOrder_byNumber = function (number) {
-    return this.user.orders.find(order => order.number == number)
+Model.getOrder_byNumber = function (number, uid) {
+    return this.getUserById(uid).orders.find(order => order.number == number)
 }
 
 Model.findIndex_byId = function (listOfItems, Id) {
@@ -280,34 +280,6 @@ Model.getCartByUserId = function (uid) {
     return null;
 }
 
-Model.getSubtotal_ofOrder = function (orderList) {
-    let subtotal = 0;
-
-    for (item of orderList) {
-        subtotal += item.price * item.qty
-    }
-
-    return subtotal
-}
-
-Model.getTax_ofOrder = function (orderList) {
-    let tax = 0;
-
-    for (item of orderList) {
-        tax += item.tax * item.qty
-    }
-
-    return tax
-}
-
-Model.getTotal_ofOrder = function (orderList) {
-    return this.getSubtotal_ofOrder(orderList) + this.getTax_ofOrder(orderList)
-}
-
-Model.getTotal_ofOrderItem = function (orderQty, orderPrice, orderTax) {
-    return (orderPrice + orderTax) * orderQty
-}
-
 /* Purchase */
 // Necesitamos el id del usuario para acceder al carrito
 Model.purchase = function (purchaseForm, purchaseNumber, uid) {
@@ -324,14 +296,15 @@ Model.purchase = function (purchaseForm, purchaseNumber, uid) {
     // Construimos los orderItems
     for (item of this.getUserById(uid).cartItems) {
         // Buscamos el item en la lista de Productos
-        let product = this.getProductById(item._id);
+        let product = this.getProductById(item.product._id);
 
         // Buscamos el item en la cartItems para obtener qty
-        let orderQty = this.getProduct_inCart(item._id, uid).qty;
+        let orderQty = item.qty;
 
         // Añadimos el item a la itemsList de order
         newOrder.itemList.push({
             itemId: product._id,
+            product: product,
             qty: orderQty,
             price: product.price,
             tax: product.tax
@@ -345,8 +318,8 @@ Model.purchase = function (purchaseForm, purchaseNumber, uid) {
     this.emptyCartItems(uid);
 }
 
-Model.getOrder = function (number) {
-    return this.findOrder_byNumber(number)
+Model.getOrder = function (orderNumber, uid) {
+    return this.getOrder_byNumber(orderNumber, uid);
 }
 
 module.exports = Model;

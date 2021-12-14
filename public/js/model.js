@@ -75,3 +75,10 @@ Model.purchase = function (purchaseForm, purchaseNumber) {
         data: { purchaseForm, purchaseNumber }
     });
 }
+
+Model.getOrder = function (oid) {
+    return $.ajax({
+        url: '/api/orders/id/' + oid,
+        method: 'GET'
+    });
+}

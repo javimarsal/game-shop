@@ -143,6 +143,17 @@ app.post('/api/orders', function (req, res, next) {
     return res.json({});
 });
 
+app.get('/api/orders/id/:oid', function (req, res, next) {
+    var oid = req.params.oid;
+    var uid = req.cookies.uid;
+    if (!uid) {
+        return res.status(401).send({ message: 'User has not signed in' });
+    }
+
+    var order = model.getOrder(oid, uid);
+    return res.json(order);
+});
+
 // Set redirection to index.html
 app.get(/\/.*/, function (req, res) {
     res.sendFile(path.join(__dirname, '/public/index.html'));

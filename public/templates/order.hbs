@@ -46,7 +46,7 @@
                     {{#each order.itemList}}
                     <tr>
                         <td>{{this.qty}}</td>
-                        <td>{{getTitle this.itemId}}</td>
+                        <td>{{getTitle this.product}}</td>
                         <td>{{formatPrice (getTotal_ofOrderItem this.qty this.price this.tax)}}</td>
                     </tr>
                     {{/each}}
