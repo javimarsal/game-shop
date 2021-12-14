@@ -142,7 +142,12 @@
                 });
             }
             else if (matches = path.match(/^\/purchase\/?$/)) {
-                $.when(cartQtyP).always(function() {
+                var cartP = Model.getCart().done(function (cart) {
+                    context.cartItems = cart;
+                }).fail(function () {
+                    console.error('Cannot retrieve cart');
+                });
+                $.when(cartQtyP, cartP).always(function() {
                     render('/templates/purchase.hbs', '#content', context);
                 });
             }

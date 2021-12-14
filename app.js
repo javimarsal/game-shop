@@ -40,6 +40,7 @@ app.post('/api/users/signin', function (req, res, next) {
 });
 
 app.post('/api/users/signup', function (req, res, next) {
+    // Se devolverá un usuario si el correo no está registrado
     var user = model.signup(req.body.user);
     if (user) {
         return res.json({});
@@ -126,6 +127,20 @@ app.delete('/api/cart/items/product/:id/all', function (req, res, next) {
         return res.json(cart);
     }
     return res.status(500).send({ message: 'Cannot remove item from cart' });
+});
+
+app.post('/api/orders', function (req, res, next) {
+    var uid = req.cookies.uid;
+    if (!uid) {
+        return res.status(401).send({ message: 'User has not signed in' });
+    }
+
+    // purchaseForm, listOfIdItems, purchaseNumber
+    var purchaseForm = req.body.purchaseForm;
+    var purchaseNumber = req.body.purchaseNumber
+    
+    model.purchase(purchaseForm, purchaseNumber, uid);
+    return res.json({});
 });
 
 // Set redirection to index.html

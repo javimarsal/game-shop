@@ -56,7 +56,7 @@ Model._cartItemsCount = 0;
 
 // Obtener precio de un producto pasando su id
 Model.getTax_ofProduct = function (productId) {
-    return this.findProduct_byId(productId).tax
+    return this.getProductById(productId).tax
 }
 
 // Calcular subtotal de una lista
@@ -97,7 +97,7 @@ Model.users = [{
     surname: 'Doe',
     birth: new Date(1990, 1, 1),
     address: '123 Main St, 12345 New York, USA',
-    shoppingCart: [],
+    cartItems: [],
     orders: []
 }];
 
@@ -110,13 +110,14 @@ Model.getUserById = function (userId) {
     return null;
 };
 
-Model.getUserShoppingCart = function () {
-    return this.user.shoppingCart
-}
+//! DEPRECATED
+// Model.getUserCartItems = function () {
+//     return this.user.cartItems
+// }
 
-Model.emptyShoppingCart = function () {
+Model.emptyCartItems = function (uid) {
     // Elimina todos los items y limpia la lista
-    this.user.shoppingCart.splice(0, this.user.shoppingCart.length)
+    this.getUserById(uid).cartItems.splice(0, this.getUserById(uid).cartItems.length)
 }
 
 /* Sign In */
@@ -143,7 +144,7 @@ Model.signup = function (newUserData) {
             surname: newUserData.surname,
             birth: newUserData.birth,
             address: newUserData.address,
-            shoppingCart: [],
+            cartItems: [],
             orders: []
         }
 
@@ -194,21 +195,21 @@ Model.addItem = function (uid, pid) {
     var user = Model.getUserById(uid);
     
     if (user && product) {
-        for (var i = 0; i < user.shoppingCart.length; i++) {
-            var cartItem = user.shoppingCart[i];
-            if (cartItem.product._id == pid) {
-                cartItem.qty++;
-                return user.shoppingCart;
+        for (var i = 0; i < user.cartItems.length; i++) {
+            var cartItems = user.cartItems[i];
+            if (cartItems.product._id == pid) {
+                cartItems.qty++;
+                return user.cartItems;
             }
         }
-        var cartItem = {
+        var cartItems = {
             _id: Model._cartItemsCount++,
             product: product,
             qty: 1
         };
-        user.shoppingCart.push(cartItem);
-        Model.cartItems.push(cartItem);
-        return user.shoppingCart;
+        user.cartItems.push(cartItems);
+        Model.cartItems.push(cartItems);
+        return user.cartItems;
     }
 
     return null;
@@ -223,8 +224,8 @@ Model.getProductById = function (pid) {
     return null;
 }
 
-Model.findProduct_inCart = function (productId) {
-    return this.user.shoppingCart.find(item => item._id == productId)
+Model.getProduct_inCart = function (pId, uId) {
+    return this.getUserById(uId).cartItems.find(item => item._id == pId)
 }
 
 Model.findOrder_byNumber = function (number) {
@@ -239,16 +240,16 @@ Model.findIndex_byId = function (listOfItems, Id) {
 Model.removeItem = function (uid, pid, all = false) {
     var user = Model.getUserById(uid);
     if (user) {
-        for (var i = 0; i < user.shoppingCart.length; i++) {
-            var item = user.shoppingCart[i];
+        for (var i = 0; i < user.cartItems.length; i++) {
+            var item = user.cartItems[i];
             if (item.product._id == pid) {
                 if (!all && (item.qty > 1)) {
                     item.qty--;
                 } else {
-                    user.shoppingCart.splice(i, 1);
+                    user.cartItems.splice(i, 1);
                     Model.cartItems.splice(Model.cartItems.indexOf(item), 1);
                 }
-                return user.shoppingCart;
+                return user.cartItems;
             }
         }
     }
@@ -262,7 +263,7 @@ Model.getCartQty = function (userId) {
     if (user) {
         let totalQty = 0;
 
-        for(item of user.shoppingCart) {
+        for(item of user.cartItems) {
             totalQty += item.qty
         }
         return totalQty
@@ -274,7 +275,7 @@ Model.getCartQty = function (userId) {
 Model.getCartByUserId = function (uid) {
     var user = Model.getUserById(uid);
     if (user) {
-        return user.shoppingCart;
+        return user.cartItems;
     }
     return null;
 }
@@ -308,7 +309,8 @@ Model.getTotal_ofOrderItem = function (orderQty, orderPrice, orderTax) {
 }
 
 /* Purchase */
-Model.purchase = function (purchaseForm, listOfIdItems, purchaseNumber) {
+// Necesitamos el id del usuario para acceder al carrito
+Model.purchase = function (purchaseForm, purchaseNumber, uid) {
     // Nueva order
     let newOrder = {
         number: purchaseNumber,
@@ -318,14 +320,14 @@ Model.purchase = function (purchaseForm, listOfIdItems, purchaseNumber) {
         cardOwner: purchaseForm.cardOwner,
         itemList: []
     }
-
+    
     // Construimos los orderItems
-    for (id of listOfIdItems) {
+    for (item of this.getUserById(uid).cartItems) {
         // Buscamos el item en la lista de Productos
-        let product = this.findProduct_byId(id)
+        let product = this.getProductById(item._id);
 
-        // Buscamos el item en la shoppingCart para obtener qty
-        let orderQty = this.findProduct_inCart(id).qty
+        // Buscamos el item en la cartItems para obtener qty
+        let orderQty = this.getProduct_inCart(item._id, uid).qty;
 
         // Añadimos el item a la itemsList de order
         newOrder.itemList.push({
@@ -337,10 +339,10 @@ Model.purchase = function (purchaseForm, listOfIdItems, purchaseNumber) {
     }
 
     // Añadir el order al user
-    this.user.orders.push(newOrder)
+    this.getUserById(uid).orders.push(newOrder);
 
-    // Vaciamos el shoppingCart
-    this.emptyShoppingCart();
+    // Vaciamos el cartItems
+    this.emptyCartItems(uid);
 }
 
 Model.getOrder = function (number) {

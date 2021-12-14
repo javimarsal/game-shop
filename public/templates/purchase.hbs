@@ -8,7 +8,7 @@
     <div class="container">
         <h1>Purchase</h1>
 
-        {{#if user.shoppingCart}}
+        {{#if cartItems}}
         <!-- Personal Data -->
         <form id="purchase-form" class="col-10 col-md-6 col-lg-4 col-xl-3 needs-validation" novalidate>
             <h2>Data requested for Purchase</h2>
@@ -49,11 +49,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{#each user.shoppingCart}}
+                    {{#each cartItems}}
                     <tr>
                         <td>{{this.qty}}</td>
-                        <td>{{getTitle this._id}}</td>
-                        <td>{{formatPrice (getTotal_ofCartItem this._id this.qty)}}</td>
+                        <td>{{getTitle this.product}}</td>
+                        <td>{{formatPrice (getTotal_ofCartItem this.product this.qty)}}</td>
                     </tr>
                     {{/each}}
                 </tbody>
@@ -62,17 +62,17 @@
             <div class="mt-4 row">
                 <label for="staticSubtotal" class="col-sm-2 col-form-label">Subtotal: </label>
                 <div class="col-sm-10">
-                    <input type="text" readonly disabled class="form-control-plaintext" id="staticSubtotal" value="{{formatPrice (getSubtotal user.shoppingCart)}}">
+                    <input type="text" readonly disabled class="form-control-plaintext" id="staticSubtotal" value="{{formatPrice (getSubtotal cartItems)}}">
                 </div>
 
                 <label for="staticTax" class="col-sm-2 col-form-label">Tax: </label>
                 <div class="col-sm-10">
-                    <input type="text" readonly disabled class="form-control-plaintext" id="staticTax" value="{{formatPrice (getTotalTax user.shoppingCart)}}">
+                    <input type="text" readonly disabled class="form-control-plaintext" id="staticTax" value="{{formatPrice (getTotalTax cartItems)}}">
                 </div>
 
                 <label for="staticTotal" class="col-sm-2 col-form-label">Total: </label>
                 <div class="col-sm-10">
-                    <input type="text" readonly disabled class="form-control-plaintext" id="staticTotal" value="{{formatPrice (getTotal user.shoppingCart)}}">
+                    <input type="text" readonly disabled class="form-control-plaintext" id="staticTotal" value="{{formatPrice (getTotal cartItems)}}">
                 </div>
             </div>
             
@@ -96,37 +96,49 @@
     function purchase_clicked (event) {
         event.preventDefault();
         var form = document.getElementById('purchase-form');
-        form.classList.add('was-validated');
 
-        if (form.checkValidity()) {
-            // datos del formulario
-            let purchaseDate = new Date();
-            let purchaseAddress = $('#address').val();
-            let purchaseCardNumber = $('#cardNumber').val();
-            let purchaseCardOwner = $('#cardOwner').val();
+        // El formulario no es válido
+        if (!form.checkValidity()) {
+            form.classList.add('was-validated');
+            return false;
+        }
 
-            // Objeto purchaseForm
-            let purchaseForm = {
-                date: purchaseDate,
-                address: purchaseAddress,
-                cardNumber: purchaseCardNumber,
-                cardOwner: purchaseCardOwner
-            }
+        // datos del formulario
+        let purchaseDate = new Date();
+        let purchaseAddress = $('#address').val();
+        let purchaseCardNumber = $('#cardNumber').val();
+        let purchaseCardOwner = $('#cardOwner').val();
 
-            // Recogemos los ID de los items del shoppingCart
-            let listOfIdItems = [];
-            for (item of Model.getUserShoppingCart()) {
-                listOfIdItems.push(item._id)
-            }
+        // Objeto purchaseForm
+        let purchaseForm = {
+            date: purchaseDate,
+            address: purchaseAddress,
+            cardNumber: purchaseCardNumber,
+            cardOwner: purchaseCardOwner
+        }
 
-            // Generamos un número para el order
-            let purchaseNumber = new Date().getTime();
+        // Recogemos los ID de los items del shoppingCart
+        /*let cartItems = [];
+        Model.getCart().done(function (cart) {
+            cartItems = cart;
+        }).fail(function () {
+            console.error('Cannot retrieve cart');
+        });
+        
+        let listOfIdItems = []
+        for (item of cartItems) {
+            listOfIdItems.push(item._id);
+        }*/
+        
+        // Generamos un número para el order
+        let purchaseNumber = new Date().getTime();
 
-            // Realizamos la compra
-            Model.purchase(purchaseForm, listOfIdItems, purchaseNumber)
-
+        // Realizamos la compra
+        Model.purchase(purchaseForm, purchaseNumber).done(function () {
+            Messages.success.push('Purchase done successfully!')
             // Volvemos a la página principal
             navigateTo(event, `/order/id/${purchaseNumber}`)
-        }
+        });
+        
     }
 </script>

@@ -70,9 +70,6 @@
             return false;
         }
 
-        // usuario que se crea (si todo va bien)
-        let user = null;
-
         // Datos del formulario
         let userName = $('#name').val();
         let userSurname = $('#surname').val();
@@ -94,8 +91,7 @@
                 address: userAddress
             }
 
-            // Se devolverá un usuario si el correo no está registrado
-            Model.signup(newUser).done(function (user) {
+            Model.signup(newUser).done(function () {
                 Messages.success.push('You\'ve been registered successfully!');
                 navigateTo(event, '/signin')
             }).fail(function (error) {
