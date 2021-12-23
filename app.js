@@ -7,10 +7,33 @@ var path = require('path');
 // Import logger module
 var logger = require('morgan');
 
+// Import cookie-parser
 var cookieParser = require('cookie-parser');
 
 // Import model
 var model = require('./model/model.js');
+
+// Import mongoose
+var mongoose = require('mongoose');
+
+// Instantiate MongoDB connection
+const uri = 'mongodb://127.0.0.1/game-shop';
+mongoose.Promise = global.Promise;
+var db = mongoose.connection;
+
+db.on('connecting', function () {
+    console.log('Connecting to', uri);
+});
+db.on('connected', function () {
+    console.log('Connected to', uri);
+});
+db.on('disconnecting', function () {
+    console.log('Disconnecting from', uri);
+});
+db.on('error', function (err) {
+    console.error('Error:', err.message);
+});
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // Instantiate the express middleware
 var app = express();
