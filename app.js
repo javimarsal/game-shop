@@ -63,14 +63,15 @@ app.post('/api/users/signin', function (req, res, next) {
 });
 
 app.post('/api/users/signup', function (req, res, next) {
-    // Se devolverá un usuario si el correo no está registrado
-    var user = model.signup(req.body.user);
-    if (user) {
-        return res.json({});
-    }
-    // Precondition fail, email must be diferent (not registered)
-    return res.status(412).json({ message: 'User email already exists' });
-})
+    return model.signup(req.body.user).then(function (user) {
+        // Se devolverá un usuario si el correo no está registrado
+        if (user) {
+            return res.json(user._id);
+        }
+        // Si user es null
+        return res.status(500).json({ message: 'Cannot create new user' });
+    });
+});
 
 app.get('/api/users/profile', function (req, res, next) {
     var uid = req.cookies.uid;

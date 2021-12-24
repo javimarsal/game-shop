@@ -1,3 +1,8 @@
+var mongoose = require('mongoose');
+var User = require('./user');
+var CartItem = require('./cartItem');
+var Product = require('./product')
+
 Model = {}
 
 Model.products = [{
@@ -133,30 +138,23 @@ Model.signin = function (email, password) {
 
 /* Sign Up */
 Model.signup = function (newUserData) {
-    // Comprobar que el correo no existe en la lista users
-    if (!this.isEmailRegistered(newUserData.email)) {
-        // Crear el nuevo usuario
-        let newUser = {
-            _id: this.searchMaxId_inUsersList() + 1,
-            email: newUserData.email,
-            password: newUserData.password,
-            name: newUserData.name,
-            surname: newUserData.surname,
-            birth: newUserData.birth,
-            address: newUserData.address,
-            cartItems: [],
-            orders: []
+    return User.findOne({ email: newUserData.email }).then(function (user) {
+        if (!user) {
+            var newUser = new User({
+                email: newUserData.email,
+                password: newUserData.password,
+                name: newUserData.name,
+                surname: newUserData.surname,
+                birth: (new Date(newUserData.birth)).getTime(),
+                address: newUserData.address,
+                cartItems: [],
+                orders: []
+            });
+            return newUser.save()
         }
-
-        // Añadir el nuevo usuario a la lista users
-        this.users.push(newUser);
-
-        // Devolvemos el nuevo usuario
-        return newUser;
-    }
-
-    // Si el correo ya existe, devolvemos null
-    return null;
+        // Si el correo ya existe, no se crea un usuario
+        return null;
+    });
 }
 
 /* Sign Out */
