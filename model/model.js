@@ -249,19 +249,14 @@ Model.removeItem = function (uid, pid, all = false) {
 };
 
 // Para el badge de cart
-Model.getCartQty = function (userId) {
-    let user = this.getUserById(userId)
-    console.log(user)
-    if (user) {
-        let totalQty = 0;
-
-        for(item of user.cartItems) {
-            totalQty += item.qty
-        }
-        return totalQty
-    }
-
-    return null
+Model.getCartQty = function (uid) {
+    // localField: es el atributo cartItems de User
+    // from: es la colección en la bdd
+    return User.aggregate([
+        { $match: { "_id": mongoose.Types.ObjectId(uid) } },
+        { $lookup: { from: 'cartitems', localField: 'cartItems', foreignField: '_id', as: 'cartItems' } },
+        { $project: { qty: { $sum: "$cartItems.qty" } } }
+    ]);
 }
 
 Model.getCartByUserId = function (uid) {

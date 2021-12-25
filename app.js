@@ -93,14 +93,19 @@ app.get('/api/users/profile', function (req, res, next) {
 
 app.get('/api/cart/qty', function (req, res, next) {
     var uid = req.cookies.uid;
+    // Comprobamos que el usuario ha iniciado sesión
     if (!uid) {
         return res.status(401).send({ message: 'User has not signed in' });
     }
-    var cartQty = model.getCartQty(uid);
-    if (cartQty !== null) {
-        return res.json(cartQty);
-    }
-    return res.status(500).send({ message: 'Cannot retrieve user cart quantity' });
+    
+    // El usuario ha iniciado sesión, obtenemos la cantidad del carrito
+    return model.getCartQty(uid).then(function (aggregate) {
+        if (aggregate > 0) {
+            return res.json(aggregate[0].qty);
+        }
+        // carrito sin productos
+        return res.status(500).json({ message: 'Cannot retrieve user cart quantity' })
+    });
 });
 
 app.get('/api/cart', function (req, res, next) {
