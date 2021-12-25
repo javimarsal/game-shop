@@ -54,12 +54,15 @@ app.get('/api/products', function (req, res, next) {
 });
 
 app.post('/api/users/signin', function (req, res, next) {
-    var user = model.signin(req.body.email, req.body.password);
-    if (user) {
-        res.cookie('uid', user._id);
-        return res.json({});
-    }
-    return res.status(401).json({ message: 'Invalid credentials' });
+    return model.signin(req.body.email, req.body.password).then(function (user) {
+        // Si existe el usuario, establecemos la cookie con el uid
+        if (user) {
+            res.cookie('uid', user._id);
+            return res.json({});
+        }
+        // Si no existe el usuario, error
+        return res.status(401).json({ message: 'Invalid credentials' });
+    });
 });
 
 app.post('/api/users/signup', function (req, res, next) {

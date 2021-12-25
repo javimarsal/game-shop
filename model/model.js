@@ -127,13 +127,7 @@ Model.emptyCartItems = function (uid) {
 
 /* Sign In */
 Model.signin = function (email, password) {
-    Model.user = null;
-    for (var i = 0; i < Model.users.length; i++) {
-        if (Model.users[i].email == email && Model.users[i].password == password) {
-            return Model.users[i];
-        }
-    }
-    return null;
+    return User.findOne({ email, password });
 }
 
 /* Sign Up */
