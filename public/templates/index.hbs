@@ -18,7 +18,7 @@
                     <div class="card-body">
                         <p class="card-text">{{this.description}}</p>
 
-                        <button class="btn btn-primary card-button {{#unless ../user}} disabled {{/unless}}" role="button" onclick="addItem(event, {{this._id}})">Buy</button>
+                        <button class="btn btn-primary card-button {{#unless ../user}} disabled {{/unless}}" role="button" onclick="addItem(event, '{{this._id}}')">Buy</button>
                         <span class="card-price">{{formatPrice this.price}}</span>
                     </div>
                 </div>

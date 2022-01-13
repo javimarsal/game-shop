@@ -50,7 +50,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/api/products', function (req, res, next) {
-    return res.json(model.products);
+    return model.getProducts().then(function (products) {
+        return res.json(products);
+    });
 });
 
 app.post('/api/users/signin', function (req, res, next) {
@@ -100,7 +102,7 @@ app.get('/api/cart/qty', function (req, res, next) {
     
     // El usuario ha iniciado sesión, obtenemos la cantidad del carrito
     return model.getCartQty(uid).then(function (aggregate) {
-        if (aggregate > 0) {
+        if (aggregate.length > 0) {
             return res.json(aggregate[0].qty);
         }
         // carrito sin productos
@@ -128,12 +130,12 @@ app.post('/api/cart/items/product/:pid', function (req, res, next) {
         return res.status(401).send({ message: 'User has not signed in' });
     }
     
-    var cart = model.addItem(uid, pid);
-    if (cart) {
-        return res.json(cart);
-    }
-    
-    return res.status(500).send({ message: 'Cannot add item to cart' });
+    return model.addItem(uid, pid).then(function (cart) {
+        if (cart) {
+            return res.json(cart);
+        }
+        return res.status(500).send({ message: 'Cannot add item to cart' });
+    });
 });
 
 app.delete('/api/cart/items/product/:id', function (req, res, next) {

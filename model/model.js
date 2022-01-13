@@ -157,17 +157,18 @@ Model.signup = function (newUserData) {
 //     Model.user = null;
 // }
 
-Model.isEmailRegistered = function (email) {
-    for (var i = 0; i < Model.users.length; i++) {
-        if (Model.users[i].email == email) {
-            // Lo encuentra
-            return true;
-        }
-    }
+//! DEPRECATED
+// Model.isEmailRegistered = function (email) {
+//     for (var i = 0; i < Model.users.length; i++) {
+//         if (Model.users[i].email == email) {
+//             // Lo encuentra
+//             return true;
+//         }
+//     }
 
-    // No lo encuentra
-    return false;
-}
+//     // No lo encuentra
+//     return false;
+// }
 
 Model.searchMaxId_inUsersList = function () {
     let maxId = Model.users[0]._id;
@@ -183,28 +184,38 @@ Model.searchMaxId_inUsersList = function () {
 
 /* Buy */
 Model.addItem = function (uid, pid) {
-    var product = Model.getProductById(pid);
-    var user = Model.getUserById(uid);
-    
-    if (user && product) {
-        for (var i = 0; i < user.cartItems.length; i++) {
-            var cartItem = user.cartItems[i];
-            if (cartItem.product._id == pid) {
-                cartItem.qty++;
-                return user.cartItems;
+    // returns a promise that is resolved or rejected when all promises are resolved or rejected
+    return Promise.all([User.findById(uid).populate('cartItems'), Product.findById(pid)]).then(function (results) {
+        // results, array of resolved values
+        var user = results[0];
+        var product = results[1];
+        if (user && product) {
+            for (var i = 0; i < user.cartItems.length; i++) {
+                var cartItem = user.cartItems[i];
+                if (cartItem.product == pid) {
+                    cartItem.qty++;
+                    return cartItem.save().then(function () {
+                        return user.cartItems;
+                    });
+                }
             }
-        }
-        var cartItem = {
-            _id: Model._cartItemsCount++,
-            product: product,
-            qty: 1
-        };
-        user.cartItems.push(cartItem);
-        Model.cartItems.push(cartItem);
-        return user.cartItems;
-    }
 
-    return null;
+            // Si el cartItem no se encontraba en el carrito
+            var cartItem = new CartItem({ qty:1, product });
+            user.cartItems.push(cartItem);
+            return Promise.all([cartItem.save(), user.save()]).then(function (result) {
+                return result[1].cartItems;
+            });
+        }
+        return null;
+    }).catch(function (err) {
+        console.error(err);
+        return null;
+    });
+}
+
+Model.getProducts = function () {
+    return Product.find();
 }
 
 Model.getProductById = function (pid) {
