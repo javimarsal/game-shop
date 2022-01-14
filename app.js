@@ -93,7 +93,7 @@ app.get('/api/users/profile', function (req, res, next) {
         return res.json(user)
     }
 
-    return res.status(500).json({ message: 'User information couldn\'t be found' })
+    return res.status(404).json({ message: 'User information couldn\'t be found' })
 })
 
 app.get('/api/cart/qty', function (req, res, next) {
@@ -115,14 +115,15 @@ app.get('/api/cart/qty', function (req, res, next) {
 
 app.get('/api/cart', function (req, res, next) {
     var uid = req.cookies.uid;
-    if (!uid) {
+    
+    return model.getCartByUserId(uid).then(function (cartItems) {
+        if (cartItems) {
+            return res.json(cartItems);
+        }
+        // Si el usuario no estaba registrado
         return res.status(401).send({ message: 'User has not signed in' });
-    }
-    var cart = model.getCartByUserId(uid);
-    if (cart) {
-        return res.json(cart);
-    }
-    return res.status(401).send({ message: 'Cannot retrieve cart' });
+    })
+    
 });
 
 // pid es un parámetro que va incluido en la URI
