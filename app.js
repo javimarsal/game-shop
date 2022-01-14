@@ -30,6 +30,9 @@ db.on('connected', function () {
 db.on('disconnecting', function () {
     console.log('Disconnecting from', uri);
 });
+db.on('disconnected', function () {
+    console.log('Disconnected from', uri);
+});
 db.on('error', function (err) {
     console.error('Error:', err.message);
 });
