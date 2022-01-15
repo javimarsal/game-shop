@@ -7,7 +7,8 @@ var schema = mongoose.Schema({
     surname: { type: String, required: true },
     address: { type: String, required: true },
     birth: { type: Date, required: true },
-    cartItems: [{ type: mongoose.Schema.Types.ObjectId, ref: 'CartItem' }]
+    cartItems: [{ type: mongoose.Schema.Types.ObjectId, ref: 'CartItem' }],
+    orders: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Order' }]
 });
 
 module.exports = mongoose.model('User', schema);

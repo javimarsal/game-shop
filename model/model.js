@@ -255,7 +255,7 @@ Model.purchase = function (purchaseForm, purchaseNumber, uid) {
         address: purchaseForm.address,
         cardNumber: purchaseForm.cardNumber,
         cardOwner: purchaseForm.cardOwner,
-        itemList: []
+        orderItems: []
     }
     
     // Construimos los orderItems
@@ -267,7 +267,7 @@ Model.purchase = function (purchaseForm, purchaseNumber, uid) {
         let orderQty = item.qty;
 
         // Añadimos el item a la itemsList de order
-        newOrder.itemList.push({
+        newOrder.orderItems.push({
             itemId: product._id,
             product: product,
             qty: orderQty,

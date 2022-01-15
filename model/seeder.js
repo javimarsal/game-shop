@@ -5,6 +5,8 @@ mongoose.Promise = global.Promise;
 var User = require('./user');
 var CartItem = require('./cartItem');
 var Product = require('./product');
+var Order = require('./order');
+var OrderItem = require('./orderItem');
 
 // URI de la BDD
 var uri = 'mongodb://127.0.0.1/game-shop';
@@ -29,6 +31,7 @@ db.on('error', function (err) {
 
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }).then(function () {
     var cartItems = [];
+    var orders = [];
     
     var user = new User({
         email: 'johndoe@example.com',
@@ -37,7 +40,8 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }).then(
         surname: 'Doe',
         birth: Date.UTC(1990, 0, 1),
         address: '123 Main St, 12345 New York, United States',
-        cartItems: cartItems
+        cartItems: cartItems,
+        orders: orders
     });
 
     var products = [
@@ -87,6 +91,10 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }).then(
 
     return CartItem.deleteMany().then(function () {
         return User.deleteMany();
+    }).then(function () {
+        return Order.deleteMany();
+    }).then(function () {
+        return OrderItem.deleteMany();
     }).then(function () {
         return user.save();
     }).then(function () {
