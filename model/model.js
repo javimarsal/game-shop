@@ -192,22 +192,32 @@ Model.findIndex_byId = function (listOfItems, Id) {
 
 /* Remove Items from cart (one or all) */
 Model.removeItem = function (uid, pid, all = false) {
-    var user = Model.getUserById(uid);
-    if (user) {
-        for (var i = 0; i < user.cartItems.length; i++) {
-            var item = user.cartItems[i];
-            if (item.product._id == pid) {
-                if (!all && (item.qty > 1)) {
-                    item.qty--;
-                } else {
-                    user.cartItems.splice(i, 1);
-                    Model.cartItems.splice(Model.cartItems.indexOf(item), 1);
+    return User.findById(uid).populate('cartItems').then(function (user) {
+        if (user) {
+            for (var i = 0; i < user.cartItems.length; i++) {
+                var cartItem = user.cartItems[i];
+                
+                if (cartItem.product.toString() == pid) {
+                    if (!all && (cartItem.qty > 1)) {
+                        cartItem.qty--;
+                        return cartItem.save().then(function () {
+                            return user.cartItems;
+                        });
+                    }
+                    else {
+                        // Quitar el cartItem de la lista cartItems de user
+                        user.cartItems.splice(i, 1);
+                        // Eliminar el cartItem
+                        return Promise.all([CartItem.findByIdAndRemove(cartItem._id), user.save()]).then(function (results) {
+                            return results[1].cartItems;
+                        });
+                    }
                 }
-                return user.cartItems;
             }
         }
-    }
-    return null;
+        return null;
+    })
+
 };
 
 // Para el badge de cart

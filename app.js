@@ -145,26 +145,24 @@ app.post('/api/cart/items/product/:pid', function (req, res, next) {
 app.delete('/api/cart/items/product/:id', function (req, res, next) {
     var pid = req.params.id;
     var uid = req.cookies.uid;
-    if (!uid) {
-        return res.status(401).send({ message: 'User has not signed in' });
-    }
-    var cart = Model.removeItem(uid, pid, false);
-    if (cart) {
-        return res.json(cart);
-    }
-    return res.status(500).send({ message: 'Cannot remove item from cart' });
+    
+    return model.removeItem(uid, pid, false).then(function (cartItems) {
+        if (cartItems) {
+            return res.status(200).send({ message: 'Item removed from cart' });
+        }
+        return res.status(500).send({ message: 'Cannot remove item from cart' });
+    });
 });
 app.delete('/api/cart/items/product/:id/all', function (req, res, next) {
     var pid = req.params.id;
     var uid = req.cookies.uid;
-    if (!uid) {
-        return res.status(401).send({ message: 'User has not signed in' });
-    }
-    var cart = Model.removeItem(uid, pid, true);
-    if (cart) {
-        return res.json(cart);
-    }
-    return res.status(500).send({ message: 'Cannot remove item from cart' });
+    
+    return model.removeItem(uid, pid, true).then(function (cartItems) {
+        if (cartItems) {
+            return res.status(200).send({ message: 'Item removed from cart' });
+        }
+        return res.status(500).send({ message: 'Cannot remove item from cart' });
+    });
 });
 
 app.post('/api/orders', function (req, res, next) {
