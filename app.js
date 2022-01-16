@@ -83,18 +83,14 @@ app.post('/api/users/signup', function (req, res, next) {
 
 app.get('/api/users/profile', function (req, res, next) {
     var uid = req.cookies.uid;
-    if (!uid) {
+
+    return model.getProfile(uid).then(function (profile) {
+        if (profile) {
+            return res.json(profile)
+        }
         return res.status(401).send({ message: 'User has not signed in' });
-    }
-
-    var user = model.getUserById(uid)
-
-    if (user) {
-        return res.json(user)
-    }
-
-    return res.status(404).json({ message: 'User information couldn\'t be found' })
-})
+    });
+});
 
 app.get('/api/cart/qty', function (req, res, next) {
     var uid = req.cookies.uid;
@@ -180,22 +176,24 @@ app.post('/api/orders', function (req, res, next) {
 app.get('/api/orders/id/:oid', function (req, res, next) {
     var oid = req.params.oid;
     var uid = req.cookies.uid;
-    if (!uid) {
-        return res.status(401).send({ message: 'User has not signed in' });
-    }
-
-    var order = model.getOrder(oid, uid);
-    return res.json(order);
+    
+    return model.getOrder(oid, uid).then(function (order) {
+        if (order) {
+            return res.json(order);
+        }
+        return res.status(401).send({ message: 'Order could not be retrieved' });
+    });
 });
 
 app.get('/api/orders', function (req, res, next) {
     var uid = req.cookies.uid;
-    if (!uid) {
+    
+    return model.getOrders(uid).then(function (orders) {
+        if (orders) {
+            return res.json(orders);
+        }
         return res.status(401).send({ message: 'User has not signed in' });
-    }
-
-    var orders = model.getOrders(uid);
-    return res.json(orders);
+    });
 });
 
 // Set redirection to index.html

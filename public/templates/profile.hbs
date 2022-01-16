@@ -40,7 +40,7 @@
 
         <!-- Table of Orders -->
         <div class="mt-5">
-            {{#if orders}}
+            {{#if profile.orders}}
             <h2>Order list</h2>
             <table class="table table-striped align-middle">
                 <thead>
@@ -52,13 +52,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{#each orders}}
+                    {{#each profile.orders}}
                     <tr>
                         <td>{{formatDate this.date}}</td>
                         <td>{{this.number}}</td>
-                        <td>{{formatPrice (getTotal_ofOrder this.itemList)}}</td>
+                        <td>{{formatPrice (getTotal_ofOrder this.orderItems)}}</td>
                         <td>
-                            <button class="btn btn-primary" role="button" onclick="navigateTo(event, '/order/id/'+{{this.number}})">Details</button>
+                            <button class="btn btn-primary" role="button" onclick="navigateTo(event, '/order/id/' + '{{this.number}}')">Details</button>
                         </td>
                     </tr>
                     {{/each}}

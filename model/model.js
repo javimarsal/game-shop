@@ -4,13 +4,9 @@ var CartItem = require('./cartItem');
 var Product = require('./product');
 var Order = require('./order');
 var OrderItem = require('./orderItem');
+const order = require('./order');
 
 Model = {}
-
-Model.cartItems = [];
-
-Model._cartItemsCount = 0;
-
 
 // Obtener precio de un producto pasando su id
 Model.getTax_ofProduct = function (productId) {
@@ -45,38 +41,27 @@ Model.getTotal = function (listOfItems) {
 }
 
 
-Model.user = null;
 
-Model.users = [{
-    _id: 1,
-    email: 'johndoe@example.com',
-    password: '1234',
-    name: 'John',
-    surname: 'Doe',
-    birth: new Date(1990, 1, 1),
-    address: '123 Main St, 12345 New York, USA',
-    cartItems: [],
-    orders: []
-}];
-
-Model.getUserById = function (userId) {
-    for (var i = 0; i < Model.users.length; i++) {
-        if (Model.users[i]._id == userId) {
-            return Model.users[i];
-        }
-    }
-    return null;
-};
+//! DEPRECATED
+// Model.getUserById = function (userId) {
+//     for (var i = 0; i < Model.users.length; i++) {
+//         if (Model.users[i]._id == userId) {
+//             return Model.users[i];
+//         }
+//     }
+//     return null;
+// };
 
 //! DEPRECATED
 // Model.getUserCartItems = function () {
 //     return this.user.cartItems
 // }
 
-Model.emptyCartItems = function (uid) {
-    // Elimina todos los items y limpia la lista
-    this.getUserById(uid).cartItems.splice(0, this.getUserById(uid).cartItems.length)
-}
+//! DEPRECATED
+// Model.emptyCartItems = function (uid) {
+//     // Elimina todos los items y limpia la lista
+//     this.getUserById(uid).cartItems.splice(0, this.getUserById(uid).cartItems.length)
+// }
 
 /* Sign In */
 Model.signin = function (email, password) {
@@ -101,6 +86,9 @@ Model.signup = function (newUserData) {
         }
         // Si el correo ya existe, no se crea un usuario
         return null;
+    }).catch(function (err) {
+        console.error(err);
+        return null;
     });
 }
 
@@ -123,17 +111,18 @@ Model.signup = function (newUserData) {
 //     return false;
 // }
 
-Model.searchMaxId_inUsersList = function () {
-    let maxId = Model.users[0]._id;
+//! DEPRECATED
+// Model.searchMaxId_inUsersList = function () {
+//     let maxId = Model.users[0]._id;
 
-    for (var i = 0; i < Model.users.length; i++) {
-        if(Model.users[i]._id > maxId) {
-            maxId = Model.users[i]._id;
-        }
-    }
+//     for (var i = 0; i < Model.users.length; i++) {
+//         if(Model.users[i]._id > maxId) {
+//             maxId = Model.users[i]._id;
+//         }
+//     }
 
-    return maxId;
-}
+//     return maxId;
+// }
 
 /* Buy */
 Model.addItem = function (uid, pid) {
@@ -180,13 +169,15 @@ Model.getProductById = function (pid) {
     return null;
 }
 
-Model.getProduct_inCart = function (pId, uId) {
-    return this.getUserById(uId).cartItems.find(item => item._id == pId)
-}
+//! DEPRECATED
+// Model.getProduct_inCart = function (pId, uId) {
+//     return this.getUserById(uId).cartItems.find(item => item._id == pId)
+// }
 
-Model.getOrder_byNumber = function (number, uid) {
-    return this.getUserById(uid).orders.find(order => order.number == number)
-}
+//! DEPRECATED
+// Model.getOrder_byNumber = function (number, uid) {
+//     return this.getUserById(uid).orders.find(order => order.number == number)
+// }
 
 Model.findIndex_byId = function (listOfItems, Id) {
     return listOfItems.findIndex(item => item._id == Id)
@@ -218,7 +209,10 @@ Model.removeItem = function (uid, pid, all = false) {
             }
         }
         return null;
-    })
+    }).catch(function (err) {
+        console.error(err);
+        return null;
+    });
 
 };
 
@@ -244,7 +238,10 @@ Model.getCartByUserId = function (uid) {
             })
         }
         return null;
-    })
+    }).catch(function (err) {
+        console.error(err);
+        return null;
+    });
 }
 
 /* Purchase */
@@ -278,10 +275,13 @@ Model.purchase = function (purchaseForm, uid) {
             });
 
             // Guardamos el orderItem en la bbdd
-            Promise.all([orderItem.save(), CartItem.findByIdAndDelete(item._id)]).then(function () {
-                // Añadimos el item a orderItems de newOrder
-                newOrder.orderItems.push(orderItem);
-            })
+            orderItem.save().then(function() {
+                CartItem.findByIdAndDelete(item._id);
+            });
+            
+            // Añadimos el item a orderItems de newOrder
+            newOrder.orderItems.push(orderItem);
+            
         }
     
         // Añadir el order al user
@@ -295,15 +295,62 @@ Model.purchase = function (purchaseForm, uid) {
             // Devolvemos el número de la order (purchaseNumber) para navegar hacia ella
             return purchaseNumber;
         });
+    }).catch(function (err) {
+        console.error(err);
+        return null;
     });
 }
 
 Model.getOrder = function (orderNumber, uid) {
-    return this.getOrder_byNumber(orderNumber, uid);
+    return User.findById(uid).populate({
+        path: 'orders',
+        populate: { 
+            path: 'orderItems',
+            populate: { path: 'product' } 
+        }
+    }).then(function (user) {
+        if (user) {
+            for (var i = 0; i < user.orders.length; i++) {
+                if (user.orders[i].number == orderNumber) {
+                    return user.orders[i];
+                }
+            }
+        }
+        // orderNumber no pertenece a ninguna order de user, o ningún usuario ha iniciado sesión
+        return null;
+    }).catch(function (err) {
+        console.error(err);
+        return null;
+    });
 }
 
 Model.getOrders = function (uid) {
-    return this.getUserById(uid).orders;
+    return User.findById(uid).populate('orders').then(function (user) {
+        if (user) {
+            return user.orders;
+        }
+        // Ningún usuario ha iniciado sesión
+        return null;
+    }).catch(function (err) {
+        console.error(err);
+        return null;
+    });
+}
+
+Model.getProfile = function (uid) {
+    // Esto incluye las orders
+    return User.findById(uid).populate({
+        path: 'orders',
+        populate: { path: 'orderItems' }
+    }).then(function (user) {
+        if (user) {
+            return user;
+        }
+        return null;
+    }).catch(function (err) {
+        console.error(err);
+        return null;
+    });
 }
 
 module.exports = Model;

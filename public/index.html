@@ -254,12 +254,12 @@
                 return new Handlebars.SafeString(tax)
             });
 
-            Handlebars.registerHelper('getTotal_ofOrder', function (orderList) {
+            Handlebars.registerHelper('getTotal_ofOrder', function (orderItems) {
                 var result = 0;
                 var subtotal = 0;
                 var tax = 0;
 
-                for (item of orderList) {
+                for (item of orderItems) {
                     subtotal += item.price * item.qty;
                     tax += item.tax * item.qty;
                 }

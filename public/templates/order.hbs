@@ -43,7 +43,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{#each order.itemList}}
+                    {{#each order.orderItems}}
                     <tr>
                         <td>{{this.qty}}</td>
                         <td>{{getTitle this.product}}</td>
@@ -56,17 +56,17 @@
             <div class="mt-4 row">
                 <label for="staticSubtotal" class="col-sm-2 col-form-label">Subtotal: </label>
                 <div class="col-sm-10">
-                    <input type="text" readonly disabled class="form-control-plaintext" id="staticSubtotal" value="{{formatPrice (getSubtotal_ofOrder order.itemList)}}">
+                    <input type="text" readonly disabled class="form-control-plaintext" id="staticSubtotal" value="{{formatPrice (getSubtotal_ofOrder order.orderItems)}}">
                 </div>
 
                 <label for="staticTax" class="col-sm-2 col-form-label">Tax: </label>
                 <div class="col-sm-10">
-                    <input type="text" readonly disabled class="form-control-plaintext" id="staticTax" value="{{formatPrice (getTax_ofOrder order.itemList)}}">
+                    <input type="text" readonly disabled class="form-control-plaintext" id="staticTax" value="{{formatPrice (getTax_ofOrder order.orderItems)}}">
                 </div>
 
                 <label for="staticTotal" class="col-sm-2 col-form-label">Total: </label>
                 <div class="col-sm-10">
-                    <input type="text" readonly disabled class="form-control-plaintext" id="staticTotal" value="{{formatPrice (getTotal_ofOrder order.itemList)}}">
+                    <input type="text" readonly disabled class="form-control-plaintext" id="staticTotal" value="{{formatPrice (getTotal_ofOrder order.orderItems)}}">
                 </div>
             </div>
         </div>
