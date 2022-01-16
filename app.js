@@ -167,16 +167,14 @@ app.delete('/api/cart/items/product/:id/all', function (req, res, next) {
 
 app.post('/api/orders', function (req, res, next) {
     var uid = req.cookies.uid;
-    if (!uid) {
-        return res.status(401).send({ message: 'User has not signed in' });
-    }
-
-    // purchaseForm, listOfIdItems, purchaseNumber
     var purchaseForm = req.body.purchaseForm;
-    var purchaseNumber = req.body.purchaseNumber
     
-    model.purchase(purchaseForm, purchaseNumber, uid);
-    return res.json({});
+    return model.purchase(purchaseForm, uid).then(function (purchaseNumber) {
+        if (purchaseNumber) {
+            return res.json(purchaseNumber);
+        }
+        return res.status(500).send({ message: 'The purchase could not be performed' });
+    });
 });
 
 app.get('/api/orders/id/:oid', function (req, res, next) {

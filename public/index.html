@@ -104,16 +104,10 @@
                     console.log('Cannot retrieve order')
                 });
 
-                if (orderP) {
-                    $.when(cartQtyP, orderP).always(function() {
-                        render('/templates/order.hbs', '#content', context);
-                    });
-                }
-                else {
-                    $.when(cartQtyP, orderP).always(function() {
-                        render('/templates/not-found.hbs', '#content', context);
-                    });
-                }
+                $.when(cartQtyP, orderP).always(function() {
+                    render('/templates/order.hbs', '#content', context);
+                });
+                
             }
             else if (matches = path.match(/^\/signin\/?$/)) {
                 $.when(cartQtyP).always(function() {

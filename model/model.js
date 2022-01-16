@@ -1,7 +1,9 @@
 var mongoose = require('mongoose');
 var User = require('./user');
 var CartItem = require('./cartItem');
-var Product = require('./product')
+var Product = require('./product');
+var Order = require('./order');
+var OrderItem = require('./orderItem');
 
 Model = {}
 
@@ -208,7 +210,7 @@ Model.removeItem = function (uid, pid, all = false) {
                         // Quitar el cartItem de la lista cartItems de user
                         user.cartItems.splice(i, 1);
                         // Eliminar el cartItem
-                        return Promise.all([CartItem.findByIdAndRemove(cartItem._id), user.save()]).then(function (results) {
+                        return Promise.all([CartItem.findByIdAndDelete(cartItem._id), user.save()]).then(function (results) {
                             return results[1].cartItems;
                         });
                     }
@@ -247,40 +249,53 @@ Model.getCartByUserId = function (uid) {
 
 /* Purchase */
 // Necesitamos el id del usuario para acceder al carrito
-Model.purchase = function (purchaseForm, purchaseNumber, uid) {
-    // Nueva order
-    let newOrder = {
-        number: purchaseNumber,
-        date: purchaseForm.date,
-        address: purchaseForm.address,
-        cardNumber: purchaseForm.cardNumber,
-        cardOwner: purchaseForm.cardOwner,
-        orderItems: []
-    }
-    
-    // Construimos los orderItems
-    for (item of this.getUserById(uid).cartItems) {
-        // Buscamos el item en la lista de Productos
-        let product = this.getProductById(item.product._id);
+Model.purchase = function (purchaseForm, uid) {
+    return Promise.all([Model.getCartByUserId(uid), User.findById(uid)]).then(function (results) {
+        let cartItems = results[0];
+        let user = results[1];
 
-        // Buscamos el item en la cartItems para obtener qty
-        let orderQty = item.qty;
+        // Purchase number
+        let purchaseNumber = new Date().getTime();
 
-        // Añadimos el item a la itemsList de order
-        newOrder.orderItems.push({
-            itemId: product._id,
-            product: product,
-            qty: orderQty,
-            price: product.price,
-            tax: product.tax
+        // Nueva order
+        let newOrder = new Order({
+            number: purchaseNumber,
+            date: purchaseForm.date,
+            address: purchaseForm.address,
+            cardNumber: purchaseForm.cardNumber,
+            cardOwner: purchaseForm.cardOwner,
+            orderItems: []
         });
-    }
+        
+        // Construimos los orderItems
+        for (item of cartItems) {    
+            // Nuevo orderItem
+            let orderItem = new OrderItem({
+                qty: item.qty,
+                price: item.product.price,
+                tax: item.product.tax,
+                product: item.product._id
+            });
 
-    // Añadir el order al user
-    this.getUserById(uid).orders.push(newOrder);
+            // Guardamos el orderItem en la bbdd
+            Promise.all([orderItem.save(), CartItem.findByIdAndDelete(item._id)]).then(function () {
+                // Añadimos el item a orderItems de newOrder
+                newOrder.orderItems.push(orderItem);
+            })
+        }
+    
+        // Añadir el order al user
+        user.orders.push(newOrder);
 
-    // Vaciamos el cartItems
-    this.emptyCartItems(uid);
+        // Vaciar cartItems de user
+        user.cartItems.splice(0, user.cartItems.length);
+
+        // Guardamos el user y la newOrder
+        return Promise.all([user.save(), newOrder.save()]).then(function () {
+            // Devolvemos el número de la order (purchaseNumber) para navegar hacia ella
+            return purchaseNumber;
+        });
+    });
 }
 
 Model.getOrder = function (orderNumber, uid) {

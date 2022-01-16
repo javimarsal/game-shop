@@ -130,11 +130,9 @@
             listOfIdItems.push(item._id);
         }*/
         
-        // Generamos un número para el order
-        let purchaseNumber = new Date().getTime();
 
         // Realizamos la compra
-        Model.purchase(purchaseForm, purchaseNumber).done(function () {
+        Model.purchase(purchaseForm).done(function (purchaseNumber) {
             Messages.success.push('Purchase done successfully!')
             // Volvemos a la página principal
             navigateTo(event, `/order/id/${purchaseNumber}`)

@@ -68,11 +68,11 @@ Model.removeItem = function (pid, all = false) {
     });
 };
 
-Model.purchase = function (purchaseForm, purchaseNumber) {
+Model.purchase = function (purchaseForm) {
     return $.ajax({
         url: '/api/orders',
         method: 'POST',
-        data: { purchaseForm, purchaseNumber }
+        data: { purchaseForm }
     });
 }
 
