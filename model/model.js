@@ -250,6 +250,8 @@ Model.purchase = function (purchaseForm, uid) {
     return Promise.all([Model.getCartByUserId(uid), User.findById(uid)]).then(function (results) {
         let cartItems = results[0];
         let user = results[1];
+        // Se introducirán los IDs de cada CardItem para luego eliminar todos a la vez
+        let cartItemsIds = [];
 
         // Purchase number
         let purchaseNumber = new Date().getTime();
@@ -265,7 +267,7 @@ Model.purchase = function (purchaseForm, uid) {
         });
         
         // Construimos los orderItems
-        for (item of cartItems) {    
+        for (item of cartItems) {
             // Nuevo orderItem
             let orderItem = new OrderItem({
                 qty: item.qty,
@@ -274,14 +276,11 @@ Model.purchase = function (purchaseForm, uid) {
                 product: item.product._id
             });
 
-            // Guardamos el orderItem en la bbdd
-            orderItem.save().then(function() {
-                CartItem.findByIdAndDelete(item._id);
-            });
-            
             // Añadimos el item a orderItems de newOrder
             newOrder.orderItems.push(orderItem);
             
+            // Añadimos el id del item a cartItemsIds
+            cartItemsIds.push(item._id);
         }
     
         // Añadir el order al user
@@ -290,8 +289,8 @@ Model.purchase = function (purchaseForm, uid) {
         // Vaciar cartItems de user
         user.cartItems.splice(0, user.cartItems.length);
 
-        // Guardamos el user y la newOrder
-        return Promise.all([user.save(), newOrder.save()]).then(function () {
+        // Guardamos el user y la newOrder, insertamos los orderItems de newOrder y eliminamos esos items de CartItems
+        return Promise.all([OrderItem.insertMany(newOrder.orderItems), newOrder.save(), user.save(), CartItem.deleteMany({ _id: cartItemsIds })]).then(function () {
             // Devolvemos el número de la order (purchaseNumber) para navegar hacia ella
             return purchaseNumber;
         });
@@ -300,6 +299,8 @@ Model.purchase = function (purchaseForm, uid) {
         return null;
     });
 }
+
+
 
 Model.getOrder = function (orderNumber, uid) {
     return User.findById(uid).populate({
