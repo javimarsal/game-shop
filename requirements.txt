@@ -1,5 +1,10 @@
 Install dependencies:
 npm install
 
+(Make sure the MongoDB service is active)
+
+Initialize Database:
+node model/seeder.js
+
 Execute project:
 node app.js
